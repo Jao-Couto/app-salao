@@ -16,7 +16,11 @@ export default function Principal({navigation}) {
 
   const pendentes = () => {
     navigation.navigate("Pendentes")
-}
+  }
+
+  const pagos = () => {
+    navigation.navigate("Pagos")
+  }
 
 
   return (
@@ -34,6 +38,7 @@ export default function Principal({navigation}) {
             />
           }
           title=" Pagos"
+          //onPress={() => pagos()}
         />
         <Button
         buttonStyle={styles.botao}

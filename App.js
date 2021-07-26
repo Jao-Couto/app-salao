@@ -10,6 +10,7 @@ import Calendario from './src/screens/calendario';
 import MyTabs from './src/screens/mytabs';
 import Marcar from './src/screens/marcarAtendimento';
 import Pendentes from './src/screens/pendentes';
+import Pagos from './src/screens/pagos';
 
 
 const Stack = createStackNavigator();
@@ -29,6 +30,7 @@ const Stack = createStackNavigator();
         <Stack.Screen name="MyTabs" component={MyTabs} />
         <Stack.Screen name="Marcar" component={Marcar} />
         <Stack.Screen name="Pendentes" component={Pendentes} />
+        <Stack.Screen name="Pagos" component={Pagos} />
       </Stack.Navigator>
     );
   }

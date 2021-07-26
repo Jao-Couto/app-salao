@@ -11,7 +11,7 @@ import pendentesService from '../service/pendentesService';
 
 
 
-export default function Atendimentos({navigation, route}) {
+export default function Pagos({navigation, route}) {
     const [atendimentos, setAtendimentos] = useState([]);
     
     const entrar = ()=>{
