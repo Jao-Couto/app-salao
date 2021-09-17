@@ -47,7 +47,7 @@ export default function Clientes() {
     <LinearGradient
     colors={['#b23dff', '#782bab', '#2e034a']}
     style={styles.safeArea}>
-      <ScrollView onTouchStart={() => listar()}>
+      <ScrollView>
       <View style={{alignItems: 'center'}}>
           <Text h2 style={styles.tit}>Clientes</Text>
           {clientes.map(cliente =>(
