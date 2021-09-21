@@ -10,9 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Principal({navigation}) {
 
-  const entrar = () => {
-      navigation.navigate("CadastroCliente")
-  }
+  
 
   const pendentes = () => {
     navigation.navigate("Pendentes")
@@ -38,21 +36,9 @@ export default function Principal({navigation}) {
             />
           }
           title=" Pagos"
-          //onPress={() => pagos()}
+          onPress={() => pagos()}
         />
-        <Button
-        buttonStyle={styles.botao}
-          icon={
-            <Icon
-              name="user-plus"
-              size={15}
-              color="white"
-              
-            />
-          }
-          title=" Cadastrar"
-          onPress={() => entrar()}
-        />
+        
         <Button
         buttonStyle={styles.botao}
           icon={

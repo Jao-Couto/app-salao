@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View } from 'react-native';
 import styles from '../style';
 import { Text, Button } from 'react-native-elements';
@@ -14,8 +14,10 @@ import pendentesService from '../service/pendentesService';
 export default function Atendimentos({navigation, route}) {
     const [atendimentos, setAtendimentos] = useState([]);
     
+    let countRef = useRef(0);
+
     const entrar = ()=>{
-        navigation.navigate("Marcar", {data: route.params.data, dataSql: route.params.dataSql})
+        navigation.navigate("Marcar", {data: route.params.data, dataSql: route.params.dataSql, num: countRef.current})
     }
 
     const deletar= (id) =>{
@@ -49,7 +51,6 @@ export default function Atendimentos({navigation, route}) {
       let sec = new Date().getSeconds();
       let dataPago =  year + '-' + month + '-' + date +" "+hours+":"+min+":"+sec;
 
-      console.log(cliente)
 
       let data ={
         cliente: cliente,
@@ -92,8 +93,9 @@ export default function Atendimentos({navigation, route}) {
         console.log("Erro ao cadastrar pendente")
       })
     }
-
+    countRef.current = route.params.num;
     useEffect(()=>{
+      console.log("entrou aqui");
         atendimentoService.listarData(route.params.dataSql)
         .then((response)=>{ 
             setAtendimentos(response.data)
@@ -105,20 +107,7 @@ export default function Atendimentos({navigation, route}) {
         console.log("Erro ao Listar")
         })
 
-    }, []);
-
-    const reload = () => {
-      atendimentoService.listarData(route.params.dataSql)
-        .then((response)=>{ 
-            setAtendimentos(response.data)
-            console.log("Listado atendimentos com sucesso")
-
-        })
-        .catch((error) => {
-            console.log(error)
-        console.log("Erro ao Listar")
-        })
-    }
+    },[countRef.current]);
 
 
 
@@ -131,17 +120,6 @@ export default function Atendimentos({navigation, route}) {
           <View style={{alignItems: 'center'}}>
             <View style={{flexDirection: 'row'}}>
           <Text h3 style={styles.tit}>{route.params.data}</Text>
-          <Button
-                    buttonStyle={{width: 40, height:40, borderRadius: 100, marginLeft: 10}}
-                    icon={
-                    <Icon
-                        name="redo"
-                          size={15}
-                        color="white"
-                    />
-                     }
-                     onPress={() => reload()}
-                />
               </View>
           {atendimentos.map(atendimento =>(
             <View style={styles.alinhaBotao} key={atendimento.id}>

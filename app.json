@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "app-salao",
+    "name": "AgendaSalão",
     "slug": "app-salao",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,7 +8,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#7f7f7f"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,16 +17,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.couto.AgendaSalao",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      },
+      "package": "com.couto.AgendaSalao",
+        "versionCode": 1
     }
   }
 }

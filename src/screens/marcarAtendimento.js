@@ -1,9 +1,8 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
-import { KeyboardAvoidingView } from "react-native";
+import React, {  useState } from "react";
+import { KeyboardAvoidingView, TextInput } from "react-native";
 import { Alert, View} from "react-native";
 import { Input, Text, Button } from "react-native-elements";
-import {Picker} from '@react-native-community/picker';
 import { ScrollView, State } from "react-native-gesture-handler";
 import { TextInputMask } from "react-native-masked-text";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -15,6 +14,7 @@ import ModalSelector from 'react-native-modal-selector-searchable'
 export default function Marcar({ navigation, route }) {
   const [clientes, setClientes] = useState([]);
   const [clienteSelecionado, setClienteSelecionado] = useState("");
+  const [clienteNameSelecionado, setClienteNameSelecionado] = useState("");
 
   const [hora, setHora] = useState("");
   const [errorHora, setErrorHora] = useState("");
@@ -76,7 +76,7 @@ export default function Marcar({ navigation, route }) {
         .marcarHora(data)
         .then((response) => {
           Alert.alert("Sucesso!", "Atendimento marcado", [{ text: "OK" }]);
-          console.log(response.data);
+          navigation.navigate("Atendimentos", {data: route.params.data, dataSql: route.params.dataSql, num: route.params.num++})
         })
         .catch((error) => {
           console.log(error);
@@ -106,18 +106,27 @@ export default function Marcar({ navigation, route }) {
 
             <View style={styles.containerMask}>
               <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
-              
               <ModalSelector
                style={styles.inputMask}
                     data={clientes.map((cliente) => {
                         return ({
                             key: cliente.id,
-                            label: cliente.nome,
+                            label: cliente.nome
                         });
                       })}
                     initValue=""
+                    onChange={(option)=>{
+                      setClienteSelecionado(option.key);
+                      setClienteNameSelecionado(option.label)
+                    }} 
                     
-                    onChange={(option)=>{setClienteSelecionado(option.key)}} />
+              >
+              <TextInput
+                        style={styles.inputMask}
+                        editable={false}
+                        placeholder="Select something yummy!"
+                        value={clienteNameSelecionado} />
+                  </ModalSelector>
             </View>
 
             <Text h4 style={styles.label}>

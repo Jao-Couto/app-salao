@@ -12,7 +12,7 @@ import styles from '../style';
 
 
 
-export default function CadastroCliente({navigation}) {
+export default function CadastroCliente({navigation, route}) {
 
     const [nome, setNome] = useState("");
     const [errorNome, setErrorNome] = useState("");
@@ -96,7 +96,7 @@ export default function CadastroCliente({navigation}) {
             Alert.alert("Sucesso!", "Cliente cadastrado com sucesso",[
                 {text: 'OK'}
             ])
-            console.log(response.data)
+            navigation.navigate("Clientes", {num: route.params.num+1})
           })
           .catch((error) => {
               console.log(error)

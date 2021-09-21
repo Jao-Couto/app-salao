@@ -1,3 +1,4 @@
+import { normalizeUnits } from 'moment';
 import { StyleSheet} from 'react-native';
 import { colors } from 'react-native-elements';
 
@@ -55,7 +56,8 @@ const styles = StyleSheet.create({
       height: 40,
       fontSize: 18,
       alignSelf: 'flex-start',
-      color: '#000'
+      color: '#000',
+      borderWidth: 0,
     },
     containerMask:{
       flexDirection: 'row',

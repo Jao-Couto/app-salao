@@ -10,7 +10,7 @@ import pendentesService from '../service/pendentesService';
 
 
 
-export default function Pendentes({ route}) {
+export default function Pendentes({route}) {
     const [pendentes, setPendentes] = useState([]);
     
 
@@ -104,17 +104,6 @@ export default function Pendentes({ route}) {
           <View style={{alignItems: 'center'}}>
             <View style={{flexDirection: 'row'}}>
           <Text h3 style={styles.tit}>Pendentes</Text>
-          <Button
-                    buttonStyle={{width: 40, height:40, borderRadius: 100, marginLeft: 10}}
-                    icon={
-                    <Icon
-                        name="redo"
-                          size={15}
-                        color="white"
-                    />
-                     }
-                     onPress={() => reload()}
-                />
               </View>
           {pendentes.map(pendente =>(
             <View style={styles.alinhaBotao} key={pendente.id}>
