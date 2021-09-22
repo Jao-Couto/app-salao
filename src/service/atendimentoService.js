@@ -4,7 +4,7 @@ class AtendimentoService{
 
     async marcarHora(data){
         return axios({
-            url: "http://192.168.1.240:3000/atendimentos/cadastrar",
+            url: "https://appsalao1.herokuapp.com/atendimentos/cadastrar",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -20,7 +20,7 @@ class AtendimentoService{
 
     async listarAtendimentos(){
         return axios({
-            url: "http://192.168.1.240:3000/atendimentos/listar",
+            url: "https://appsalao1.herokuapp.com/atendimentos/listar",
             method: "GET",
             timeout: 5000,
             header:{
@@ -35,7 +35,7 @@ class AtendimentoService{
 
     async listarData(data){
         return axios({
-            url: "http://192.168.1.240:3000/atendimentos/data/"+data,
+            url: "https://appsalao1.herokuapp.com/atendimentos/data/"+data,
             method: "GET",
             timeout: 5000,
             header:{
@@ -50,7 +50,7 @@ class AtendimentoService{
 
     async listarId(data){
         return axios({
-            url: "http://192.168.1.240:3000/atendimentos/id/"+data,
+            url: "https://appsalao1.herokuapp.com/atendimentos/id/"+data,
             method: "GET",
             timeout: 5000,
             header:{
@@ -65,7 +65,7 @@ class AtendimentoService{
 
     async deletarId(data){
         return axios({
-            url: "http://192.168.1.240:3000/atendimentos/delete/"+data,
+            url: "https://appsalao1.herokuapp.com/atendimentos/delete/"+data,
             method: "DELETE",
             timeout: 5000,
             header:{

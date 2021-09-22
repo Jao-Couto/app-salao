@@ -4,7 +4,7 @@ class PendentesService{
 
     async cadastrar(data){
         return axios({
-            url: "http://192.168.1.240:3000/pendentes/cadastrar",
+            url: "https://appsalao1.herokuapp.com/pendentes/cadastrar",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -20,7 +20,7 @@ class PendentesService{
 
     async listarPendentes(){
         return axios({
-            url: "http://192.168.1.240:3000/pendentes/listar",
+            url: "https://appsalao1.herokuapp.com/pendentes/listar",
             method: "GET",
             timeout: 5000,
             header:{
@@ -35,7 +35,7 @@ class PendentesService{
 
     async listarData(data){
         return axios({
-            url: "http://192.168.1.240:3000/pendentes/data/"+data,
+            url: "https://appsalao1.herokuapp.com/pendentes/data/"+data,
             method: "GET",
             timeout: 5000,
             header:{
@@ -50,7 +50,7 @@ class PendentesService{
 
     async listarId(data){
         return axios({
-            url: "http://192.168.1.240:3000/pendentes/id/"+data,
+            url: "https://appsalao1.herokuapp.com/pendentes/id/"+data,
             method: "GET",
             timeout: 5000,
             header:{
@@ -65,7 +65,7 @@ class PendentesService{
 
     async deletarId(data){
         return axios({
-            url: "http://192.168.1.240:3000/pendentes/delete/"+data,
+            url: "https://appsalao1.herokuapp.com/pendentes/delete/"+data,
             method: "DELETE",
             timeout: 5000,
             header:{

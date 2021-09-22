@@ -4,7 +4,7 @@ class PagoService{
 
     async cadastrar(data){
         return axios({
-            url: "http://192.168.1.240:3000/pagos/cadastrar",
+            url: "https://appsalao1.herokuapp.com/pagos/cadastrar",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -20,7 +20,7 @@ class PagoService{
 
     async listar(){
         return axios({
-            url: "http://192.168.1.240:3000/pagos/listar",
+            url: "https://appsalao1.herokuapp.com/pagos/listar",
             method: "GET",
             timeout: 5000,
             header:{
@@ -35,7 +35,7 @@ class PagoService{
 
     async listarData(data){
         return axios({
-            url: "http://192.168.1.240:3000/pagos/data/"+data,
+            url: "https://appsalao1.herokuapp.com/pagos/data/"+data,
             method: "GET",
             timeout: 5000,
             header:{
@@ -50,7 +50,7 @@ class PagoService{
 
     async listarId(data){
         return axios({
-            url: "http://192.168.1.240:3000/pagos/id/"+data,
+            url: "https://appsalao1.herokuapp.com/pagos/id/"+data,
             method: "GET",
             timeout: 5000,
             header:{
