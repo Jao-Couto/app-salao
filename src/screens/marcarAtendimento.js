@@ -124,7 +124,7 @@ export default function Marcar({ navigation, route }) {
               <TextInput
                         style={styles.inputMask}
                         editable={false}
-                        placeholder="Select something yummy!"
+                        placeholder="Selecione um cliente"
                         value={clienteNameSelecionado} />
                   </ModalSelector>
             </View>
