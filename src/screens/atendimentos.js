@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import pagoService from '../service/pagoService';
 import pendentesService from '../service/pendentesService';
-
+import Notificar from './notificarWhatsApp';
 
 
 export default function Atendimentos({navigation, route}) {
@@ -109,8 +109,10 @@ export default function Atendimentos({navigation, route}) {
 
     },[countRef.current]);
 
-
-
+  const ApenasNumeros= (num)=>{
+    return '55'+num.replace(/([^\d])+/gim, '');
+  }
+  
 
   return(
         <LinearGradient
@@ -128,7 +130,9 @@ export default function Atendimentos({navigation, route}) {
                 <Text style={{fontSize:18}}>Hora: {(atendimento.hora).substring(0,5)}</Text>
                 <Text style={{fontSize:18}}>Descrição: {atendimento.descricao}</Text>
                 <Text style={{fontSize:18}}>R$ {parseFloat(atendimento.valor).toFixed(2).replace(".", ",")}</Text>
-                
+                <Notificar num={
+                  ApenasNumeros(atendimento.cliente.celular)
+                  } texto='Atendimento marcado para o dia 23/09/2021! Confirmar comparacimento.'></Notificar>
               </View>
               <View style={{justifyContent:'space-around'}}>
               <Button

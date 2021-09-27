@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import pagoService from '../service/pagoService';
 import pendentesService from '../service/pendentesService';
-
+import NotificarWhatsApp from './notificarWhatsApp';
 
 
 export default function Pendentes({route}) {
@@ -113,7 +113,6 @@ export default function Pendentes({route}) {
                 <Text style={{fontSize:18}}>Hora: {(pendente.hora).substring(0,5)}</Text>
                 <Text style={{fontSize:18}}>Descrição: {pendente.descricao}</Text>
                 <Text style={{fontSize:18}}>R$ {parseFloat(pendente.valor).toFixed(2).replace(".", ",")}</Text>
-                
               </View>
               <View style={{justifyContent:'space-around'}}>
               <Button
