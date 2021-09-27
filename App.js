@@ -11,6 +11,7 @@ import MyTabs from './src/screens/mytabs';
 import Marcar from './src/screens/marcarAtendimento';
 import Pendentes from './src/screens/pendentes';
 import Pagos from './src/screens/pagos';
+import CadastroUsuario from './src/screens/cadastroUsuario';
 
 
 const Stack = createStackNavigator();
@@ -31,6 +32,7 @@ const Stack = createStackNavigator();
         <Stack.Screen name="Marcar" component={Marcar} />
         <Stack.Screen name="Pendentes" component={Pendentes} />
         <Stack.Screen name="Pagos" component={Pagos} />
+        <Stack.Screen name="CadastroUsuario" component={CadastroUsuario} />
       </Stack.Navigator>
     );
   }

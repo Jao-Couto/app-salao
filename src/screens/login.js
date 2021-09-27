@@ -8,7 +8,7 @@ import styles from '../style';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Platform } from 'react-native';
 import { ScrollView } from 'react-native';
-
+import Globais from '../globais';
 
 
 export default function Login({navigation}) {
@@ -36,11 +36,16 @@ export default function Login({navigation}) {
 
   const entrar = () => {
     if(validar()){
+      Globais.user = 1
       navigation.reset({
           index: 0,
           routes: [{name:"MyTabs"}]
       })
     }
+  }
+
+  const telaCadastro = ()=>{
+    navigation.navigate("CadastroUsuario")
   }
 
 
@@ -80,6 +85,12 @@ export default function Login({navigation}) {
         secureTextEntry={true}
         errorMessage={errorPass}
       />
+      <Text
+        style={{color:'white', fontSize:15, marginBottom:20}}
+        onPress={() => telaCadastro()}
+      >
+        Cadastrar
+      </Text>
       
       <Button
         icon={
