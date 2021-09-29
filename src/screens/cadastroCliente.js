@@ -9,7 +9,7 @@ import { TextInputMask } from 'react-native-masked-text';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import clienteService from '../service/clienteService';
 import styles from '../style';
-
+import Globais from '../globais'
 
 
 export default function CadastroCliente({navigation, route}) {
@@ -89,7 +89,8 @@ export default function CadastroCliente({navigation, route}) {
               numero: num,
               cidade: cidade,
               celular: cel,
-              nascimento: nascimento
+              nascimento: nascimento,
+              usuario: Globais.user
           }
           clienteService.cadastrarCliente(data)
           .then((response)=>{

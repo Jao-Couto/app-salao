@@ -1,4 +1,5 @@
 import axios from "axios"
+import Globais from "../globais"
 
 class PagoService{
 
@@ -20,7 +21,7 @@ class PagoService{
 
     async listar(){
         return axios({
-            url: "https://appsalao1.herokuapp.com/pagos/listar",
+            url: "https://appsalao1.herokuapp.com/pagos/listar"+Globais.user,
             method: "GET",
             timeout: 5000,
             header:{

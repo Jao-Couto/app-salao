@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/core';
+import Globais from '../globais';
 
 
 
@@ -17,7 +18,7 @@ export default function Clientes() {
     const route = useRoute();
 
     const listar = () =>{
-        clienteService.listarClientes()
+        clienteService.listarClientes(Globais.user)
         .then((response)=>{
             
             setClientes(response.data)

@@ -20,21 +20,26 @@ export default function Atendimentos({navigation, route}) {
         navigation.navigate("Marcar", {data: route.params.data, dataSql: route.params.dataSql, num: countRef.current})
     }
 
+    const listar = ()=>{
+      atendimentoService.listarData(route.params.dataSql)
+        .then((response)=>{ 
+            setAtendimentos(response.data)
+            console.log("Listado atendimentos com sucesso")
+
+        })
+        .catch((error) => {
+            console.log(error)
+        console.log("Erro ao Listar")
+        })
+    }
+
+    
     const deletar= (id) =>{
       atendimentoService.deletarId(id)
       .then((response)=>{
         console.log("Sucesso deletar atendimento")
         console.log(response.data)
-        atendimentoService.listarData(route.params.dataSql)
-      .then((response)=>{ 
-          setAtendimentos(response.data)
-          console.log("Listado atendimentos com sucesso")
-
-      })
-      .catch((error) => {
-          console.log(error)
-      console.log("Erro ao Listar")
-      })
+        listar()
       })
       .catch((error) => {
           console.log(error)
@@ -42,7 +47,7 @@ export default function Atendimentos({navigation, route}) {
       })
     }
 
-    const pago= (id, cliente, hora, desc, valor) => {
+    const pago= (id) => {
       let date = new Date().getDate();
       let month = new Date().getMonth() + 1;
       let year = new Date().getFullYear();
@@ -53,19 +58,15 @@ export default function Atendimentos({navigation, route}) {
 
 
       let data ={
-        cliente: cliente,
-        data: route.params.dataSql,
         dataPago: dataPago,
-        hora: hora,
-        descricao: desc,
-        valor: valor,
+        atendimento: id
       }
 
       pagoService.cadastrar(data)
       .then((response)=>{
         console.log("Sucesso cadastro Pago")
-        console.log(response.data)
-        deletar(id)
+        listar()
+
       })
       .catch((error) => {
           console.log(error)
@@ -93,20 +94,11 @@ export default function Atendimentos({navigation, route}) {
         console.log("Erro ao cadastrar pendente")
       })
     }
+
+
     countRef.current = route.params.num;
     useEffect(()=>{
-      console.log("entrou aqui");
-        atendimentoService.listarData(route.params.dataSql)
-        .then((response)=>{ 
-            setAtendimentos(response.data)
-            console.log("Listado atendimentos com sucesso")
-
-        })
-        .catch((error) => {
-            console.log(error)
-        console.log("Erro ao Listar")
-        })
-
+      listar()
     },[countRef.current]);
 
   const ApenasNumeros= (num)=>{
@@ -126,12 +118,12 @@ export default function Atendimentos({navigation, route}) {
           {atendimentos.map(atendimento =>(
             <View style={styles.alinhaBotao} key={atendimento.id}>
               <View style={styles.texto}  > 
-                <Text h4>Cliente: {(atendimento.cliente.nome)}</Text>
+                <Text h4>Cliente: {(atendimento.nome)}</Text>
                 <Text style={{fontSize:18}}>Hora: {(atendimento.hora).substring(0,5)}</Text>
                 <Text style={{fontSize:18}}>Descrição: {atendimento.descricao}</Text>
                 <Text style={{fontSize:18}}>R$ {parseFloat(atendimento.valor).toFixed(2).replace(".", ",")}</Text>
                 <Notificar num={
-                  ApenasNumeros(atendimento.cliente.celular)
+                  ApenasNumeros(atendimento.celular)
                   } texto='Atendimento marcado para o dia 23/09/2021! Confirmar comparacimento.'></Notificar>
               </View>
               <View style={{justifyContent:'space-around'}}>
@@ -139,7 +131,7 @@ export default function Atendimentos({navigation, route}) {
                   buttonStyle={{borderRadius: 10, margin: 2}}
                   titleStyle={{fontSize: 12}}
                     title="Pago"
-                    onPress={() => pago(atendimento.id, atendimento.cliente.id, atendimento.hora, atendimento.descricao, atendimento.valor)}
+                    onPress={() => pago(atendimento.id)}
                 />
                 <Button
                     buttonStyle={{borderRadius: 10, margin: 2}}

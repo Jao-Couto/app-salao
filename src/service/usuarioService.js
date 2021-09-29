@@ -1,11 +1,10 @@
 import axios from "axios"
-import Globais from "../globais"
 
-class ClienteService{
+class UsuarioService{
 
-    async cadastrarCliente(data){
+    async cadastrarUsuario(data){
         return axios({
-            url: "https://appsalao1.herokuapp.com/cliente/cadastrar",
+            url: "https://appsalao1.herokuapp.com/usuario/cadastrar",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -19,11 +18,12 @@ class ClienteService{
         })
     }
 
-    async listarClientes(){
+    async loginUsuario(data){
         return axios({
-            url: "https://appsalao1.herokuapp.com/cliente/listar"+Globais.user,
-            method: "GET",
+            url: "https://appsalao1.herokuapp.com/usuario/login",
+            method: "POST",
             timeout: 5000,
+            data: data,
             header:{
                 Accept: 'application/json'
             }
@@ -34,9 +34,9 @@ class ClienteService{
         })
     }
 
-    async listarId(data){
+    async listarUsuario(){
         return axios({
-            url: "https://appsalao1.herokuapp.com/cliente/"+data,
+            url: "https://appsalao1.herokuapp.com/usuario/listar",
             method: "GET",
             timeout: 5000,
             header:{
@@ -50,5 +50,7 @@ class ClienteService{
     }
 }
 
-const clienteService = new ClienteService()
-export default clienteService
+
+
+const usuarioService = new UsuarioService()
+export default usuarioService

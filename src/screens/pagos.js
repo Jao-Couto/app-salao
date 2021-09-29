@@ -42,9 +42,11 @@ export default function Pagos({ route}) {
           {pagos.map(pago =>(
             <View style={styles.alinhaBotao} key={pago.id}>
               <View style={styles.texto}  > 
-                <Text h4>Cliente: {(pago.cliente.nome)}</Text>
-                <Text style={{fontSize:18}}>Data: {(pago.data)}</Text>
-                <Text style={{fontSize:18}}>Hora: {(pago.hora).substring(0,5)}</Text>
+                <Text h4>Cliente: {(pago.cliente_nome)}</Text>
+                <Text style={{fontSize:18}}>Data pago: {(pago.pagos_dataPago).split("T")[0]}</Text>
+                <Text style={{fontSize:18}}>Hora pago: {(pago.pagos_dataPago).split("T")[1].substring(0,5)}</Text>
+                <Text style={{fontSize:18}}>Data atendido: {(pago.data).split("T")[0]}</Text>
+                <Text style={{fontSize:18}}>Hora atendido: {(pago.hora).substring(0,5)}</Text>
                 <Text style={{fontSize:18}}>Descrição: {pago.descricao}</Text>
                 <Text style={{fontSize:18}}>R$ {parseFloat(pago.valor).toFixed(2).replace(".", ",")}</Text>
                 

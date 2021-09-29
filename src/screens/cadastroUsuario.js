@@ -1,16 +1,17 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
-import { KeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingView, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {View} from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import styles from '../style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInputMask } from 'react-native-masked-text';
+import usuarioService from '../service/usuarioService';
 
 
 
-export default function CadastroUsuario(){
+export default function CadastroUsuario({navigation}){
     const [nome, setNome] = useState("");
     const [errorNome, setErrorNome] = useState("");
 
@@ -54,6 +55,21 @@ export default function CadastroUsuario(){
                 senha: senha,
                 cpf: CPF
             }
+
+            usuarioService.cadastrarUsuario(data)
+            .then((response)=>{
+                Alert.alert("Sucesso!", "Usuário cadastrado com sucesso",[
+                    {text: 'OK'}
+                ])
+                navigation.navigate("Login")
+            })
+            .catch((error)=>{
+                console.log(error);
+                Alert.alert("ERROR!", "Erro ao cadastrar usuário",[
+                    {text: 'OK'}
+                ])
+            })
+            
         }
     }
 
@@ -131,6 +147,7 @@ export default function CadastroUsuario(){
                         ref={(ref) => cpfField = ref}
                     />
                 </View>
+                <Text style={styles.errorMsg}>{errorCPF}</Text>
 
                 <Button
                     buttonStyle={{marginBottom: 50}}

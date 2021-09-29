@@ -76,7 +76,7 @@ export default function Marcar({ navigation, route }) {
         .marcarHora(data)
         .then((response) => {
           Alert.alert("Sucesso!", "Atendimento marcado", [{ text: "OK" }]);
-          navigation.navigate("Atendimentos", {data: route.params.data, dataSql: route.params.dataSql, num: route.params.num++})
+          navigation.navigate("Atendimentos", {data: route.params.data, dataSql: route.params.dataSql, num: route.params.num+2})
         })
         .catch((error) => {
           console.log(error);

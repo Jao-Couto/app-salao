@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Image, KeyboardAvoidingView } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView } from 'react-native';
 import { View } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Platform } from 'react-native';
 import { ScrollView } from 'react-native';
 import Globais from '../globais';
+import usuarioService from '../service/usuarioService';
 
 
 export default function Login({navigation}) {
@@ -23,11 +24,11 @@ export default function Login({navigation}) {
   const validar = () =>{
     
     let error = true
-    if(user != "Meire"){
+    if(user == ""){
       setErrorUser("Usuário inválido")
       error = false
     }
-    if(password != "123"){
+    if(password == ""){
       setErrorPass("Senha inválido")
       error = false
     }
@@ -36,11 +37,27 @@ export default function Login({navigation}) {
 
   const entrar = () => {
     if(validar()){
-      Globais.user = 1
-      navigation.reset({
-          index: 0,
-          routes: [{name:"MyTabs"}]
+      data = {
+        email: user,
+        senha: password
+      };
+      usuarioService.loginUsuario(data)
+      .then((response)=>{
+        if(response.data.status){
+          Globais.user = response.data.mensagem
+          navigation.reset({
+            index: 0,
+            routes: [{name:"MyTabs"}]
+          })
+        }else
+          Alert.alert("ERRO!", "Email e/ou senha incorretos",[
+            {text: 'OK'}
+          ])
       })
+      .catch((error)=>{
+        console.log(error);
+      })
+      
     }
   }
 

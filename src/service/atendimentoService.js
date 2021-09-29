@@ -1,4 +1,5 @@
 import axios from "axios"
+import Globais from "../globais"
 
 class AtendimentoService{
 
@@ -20,7 +21,7 @@ class AtendimentoService{
 
     async listarAtendimentos(){
         return axios({
-            url: "https://appsalao1.herokuapp.com/atendimentos/listar",
+            url: "https://appsalao1.herokuapp.com/atendimentos/listar"+Globais.user,
             method: "GET",
             timeout: 5000,
             header:{
@@ -35,7 +36,7 @@ class AtendimentoService{
 
     async listarData(data){
         return axios({
-            url: "https://appsalao1.herokuapp.com/atendimentos/data/"+data,
+            url: "https://appsalao1.herokuapp.com/atendimentos/data"+Globais.user+"/"+data,
             method: "GET",
             timeout: 5000,
             header:{
