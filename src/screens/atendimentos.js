@@ -16,6 +16,7 @@ export default function Atendimentos({navigation, route}) {
     
     let countRef = useRef(0);
 
+    console.log("inicio "+countRef.current);
     const entrar = ()=>{
         navigation.navigate("Marcar", {data: route.params.data, dataSql: route.params.dataSql, num: countRef.current})
     }
@@ -74,29 +75,26 @@ export default function Atendimentos({navigation, route}) {
       })
     }
 
-    const pendente= (id, cliente, hora, desc, valor) => {
+    const pendente= (id) => {
       let data ={
-        cliente: cliente,
-        data: route.params.dataSql,
-        hora: hora,
-        descricao: desc,
-        valor: valor,
+        atendimento: id
       }
 
       pendentesService.cadastrar(data)
       .then((response)=>{
-        console.log("Sucesso cadastro Pendente")
-        console.log(response.data)
-        deletar(id)
+        listar()
+        console.log("Sucesso cadastro fiado")
       })
       .catch((error) => {
           console.log(error)
-        console.log("Erro ao cadastrar pendente")
+        console.log("Erro ao cadastrar fiado")
       })
     }
 
 
-    countRef.current = route.params.num;
+    if(route.params.num != undefined)
+      countRef.current = route.params.num;
+    console.log("depois "+countRef.current);
     useEffect(()=>{
       listar()
     },[countRef.current]);
@@ -136,8 +134,8 @@ export default function Atendimentos({navigation, route}) {
                 <Button
                     buttonStyle={{borderRadius: 10, margin: 2}}
                     titleStyle={{fontSize: 12}}
-                    title="Pendente"
-                    onPress={() => pendente(atendimento.id, atendimento.cliente.id, atendimento.hora, atendimento.descricao, atendimento.valor)}
+                    title="Fiado"
+                    onPress={() => pendente(atendimento.id)}
                 />
                 <Button
                     buttonStyle={{borderRadius: 10, margin: 2}}

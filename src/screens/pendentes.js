@@ -13,22 +13,24 @@ import NotificarWhatsApp from './notificarWhatsApp';
 export default function Pendentes({route}) {
     const [pendentes, setPendentes] = useState([]);
     
+    const listar = () => {
+      pendentesService.listarPendentes()
+        .then((response)=>{ 
+            setPendentes(response.data)
+            console.log("Listado fiados com sucesso")
+
+        })
+        .catch((error) => {
+            console.log(error)
+        console.log("Erro ao Listar")
+        })
+    }
 
     const deletar= (id) =>{
       pendentesService.deletarId(id)
       .then((response)=>{
         console.log("Sucesso deletar pendentes")
-        console.log(response.data)
-        pendentesService.listarPendentes()
-      .then((response)=>{ 
-          setPendentes(response.data)
-          console.log("Listado pendentes com sucesso")
-
-      })
-      .catch((error) => {
-          console.log(error)
-      console.log("Erro ao Listar")
-      })
+        listar()
       })
       .catch((error) => {
           console.log(error)
@@ -36,7 +38,7 @@ export default function Pendentes({route}) {
       })
     }
 
-    const pago= (id, cliente, hora, dia, desc, valor) => {
+    const pago= (id) => {
       let date = new Date().getDate();
       let month = new Date().getMonth() + 1;
       let year = new Date().getFullYear();
@@ -46,19 +48,15 @@ export default function Pendentes({route}) {
       let dataPago =  year + '-' + month + '-' + date +" "+hours+":"+min+":"+sec;
 
       let data ={
-        cliente: cliente,
-        data: dia,
         dataPago: dataPago,
-        hora: hora,
-        descricao: desc,
-        valor: valor,
+        atendimento: id
       }
 
       pagoService.cadastrar(data)
       .then((response)=>{
         console.log("Sucesso cadastro Pago")
-        console.log(response.data)
-        deletar(id)
+        listar()
+
       })
       .catch((error) => {
           console.log(error)
@@ -67,31 +65,9 @@ export default function Pendentes({route}) {
     }
 
     useEffect(()=>{
-        pendentesService.listarPendentes()
-        .then((response)=>{ 
-            setPendentes(response.data)
-            console.log("Listado pendentes com sucesso")
-
-        })
-        .catch((error) => {
-            console.log(error)
-        console.log("Erro ao Listar")
-        })
-
+      listar()
     }, []);
 
-    const reload = () => {
-      pendentesService.listarPendentes()
-        .then((response)=>{ 
-            setPendentes(response.data)
-            console.log("Listado pendentes com sucesso")
-
-        })
-        .catch((error) => {
-            console.log(error)
-        console.log("Erro ao Listar")
-        })
-    }
 
 
 
@@ -103,13 +79,13 @@ export default function Pendentes({route}) {
           <ScrollView >
           <View style={{alignItems: 'center'}}>
             <View style={{flexDirection: 'row'}}>
-          <Text h3 style={styles.tit}>Pendentes</Text>
+          <Text h3 style={styles.tit}>Pagamentos pendentes</Text>
               </View>
           {pendentes.map(pendente =>(
-            <View style={styles.alinhaBotao} key={pendente.id}>
+            <View style={styles.alinhaBotao} key={pendente.pendentes_id}>
               <View style={styles.texto}  > 
-                <Text h4>Cliente: {(pendente.cliente.nome)}</Text>
-                <Text style={{fontSize:18}}>Data: {(pendente.data)}</Text>
+                <Text h4>Cliente: {(pendente.cliente_nome)}</Text>
+                <Text style={{fontSize:18}}>Data: {(pendente.data).split("T")[0]}</Text>
                 <Text style={{fontSize:18}}>Hora: {(pendente.hora).substring(0,5)}</Text>
                 <Text style={{fontSize:18}}>Descrição: {pendente.descricao}</Text>
                 <Text style={{fontSize:18}}>R$ {parseFloat(pendente.valor).toFixed(2).replace(".", ",")}</Text>
@@ -119,13 +95,13 @@ export default function Pendentes({route}) {
                   buttonStyle={{borderRadius: 10, margin: 2}}
                   titleStyle={{fontSize: 12}}
                     title="Pago"
-                    onPress={() => pago(pendente.id, pendente.cliente.id, pendente.hora, pendente.data, pendente.descricao, pendente.valor)}
+                    onPress={() => pago(pendente.pendentes_id)}
                 />
                 <Button
                     buttonStyle={{borderRadius: 10, margin: 2}}
                     titleStyle={{fontSize: 12}}
                     title="Deletar"
-                    onPress={() => deletar(pendente.id)}
+                    onPress={() => deletar(pendente.pendentes_id)}
                 />
                 </View>
             </View>

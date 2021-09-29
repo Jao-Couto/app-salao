@@ -1,4 +1,5 @@
 import axios from "axios"
+import Globais from "../globais"
 
 class PendentesService{
 
@@ -20,22 +21,7 @@ class PendentesService{
 
     async listarPendentes(){
         return axios({
-            url: "https://appsalao1.herokuapp.com/pendentes/listar",
-            method: "GET",
-            timeout: 5000,
-            header:{
-                Accept: 'application/json'
-            }
-        }).then((response)=>{
-            return Promise.resolve(response)
-        }).catch((error)=>{
-            return Promise.reject(error)
-        })
-    }
-
-    async listarData(data){
-        return axios({
-            url: "https://appsalao1.herokuapp.com/pendentes/data/"+data,
+            url: "https://appsalao1.herokuapp.com/pendentes/listar"+Globais.user,
             method: "GET",
             timeout: 5000,
             header:{
