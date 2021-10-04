@@ -1,26 +1,30 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React, {  useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { KeyboardAvoidingView, TextInput } from "react-native";
 import { Alert, View} from "react-native";
-import { Input, Text, Button } from "react-native-elements";
-import { ScrollView, State } from "react-native-gesture-handler";
+import { Text, Button } from "react-native-elements";
+import { ScrollView } from "react-native-gesture-handler";
 import { TextInputMask } from "react-native-masked-text";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import atendimentoService from "../service/atendimentoService";
 import clienteService from "../service/clienteService";
+import servicosService from "../service/servicosService"
 import styles from "../style";
 import ModalSelector from 'react-native-modal-selector-searchable'
 
 export default function Marcar({ navigation, route }) {
   const [clientes, setClientes] = useState([]);
   const [clienteSelecionado, setClienteSelecionado] = useState("");
+  const [errorClienteSelecionado, setErrorClienteSelecionado] = useState("");
   const [clienteNameSelecionado, setClienteNameSelecionado] = useState("");
 
   const [hora, setHora] = useState("");
   const [errorHora, setErrorHora] = useState("");
 
-  const [desc, setDesc] = useState("");
-  const [errorDesc, setErrorDesc] = useState("");
+  const [servicos, setServicos] = useState([]);
+  const [servicoSelecionado, setServicoSelecionado] = useState("");
+  const [errorServicoSelecionado, setErrorServicoSelecionado] = useState("");
+  const [servicoNameSelecionado, setServicoNameSelecionado] = useState("");
 
   const [valor, setValor] = useState("");
   const [errorValor, setErrorValor] = useState("");
@@ -28,18 +32,27 @@ export default function Marcar({ navigation, route }) {
   let horaField = null;
   let valorField = null;
 
-  if (clientes.length == 0) {
-    clienteService
-      .listarClientes()
+  useEffect(()=>{
+    clienteService.listarClientes()
       .then((response) => {
         setClientes(response.data);
         console.log("Listado Clientes com sucesso");
       })
       .catch((error) => {
         console.log(error);
-        console.log("Erro ao Listar");
+        console.log("Erro ao Listar Clientes");
       });
-  }
+
+    servicosService.listarServicos()
+    .then((response)=>{
+      setServicos(response.data);
+      console.log("Listado Serviços com sucesso");
+    }).catch((error)=>{
+      console.log(error);
+      console.log("Erro ao Listar Serviços");
+    })
+
+  },[]);
 
   const validar = () => {
     let error = true;
@@ -47,8 +60,12 @@ export default function Marcar({ navigation, route }) {
       setErrorHora("Hora inválida");
       error = false;
     }
-    if (desc == "") {
-      setErrorDesc("Descrição inválida");
+    if (servicoSelecionado == "") {
+      setErrorServicoSelecionado("Servico inválido");
+      error = false;
+    }
+    if (clienteSelecionado == "") {
+      setErrorClienteSelecionado("Servico inválido");
       error = false;
     }
     if (!valorField.isValid()) {
@@ -69,7 +86,7 @@ export default function Marcar({ navigation, route }) {
         cliente: clienteSelecionado,
         data: route.params.dataSql,
         hora: hora,
-        descricao: desc,
+        descricao: servicoSelecionado,
         valor: aux,
       };
       atendimentoService
@@ -103,7 +120,6 @@ export default function Marcar({ navigation, route }) {
             <Text h4 style={styles.label}>
               Cliente:
             </Text>
-
             <View style={styles.containerMask}>
               <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
               <ModalSelector
@@ -128,6 +144,7 @@ export default function Marcar({ navigation, route }) {
                         value={clienteNameSelecionado} />
                   </ModalSelector>
             </View>
+            <Text style={styles.errorMsg}>{errorClienteSelecionado}</Text>
 
             <Text h4 style={styles.label}>
               Horário:
@@ -159,23 +176,38 @@ export default function Marcar({ navigation, route }) {
             <Text style={styles.errorMsg}>{errorHora}</Text>
 
             <Text h4 style={styles.label}>
-              Descrição:
+              Serviço:
             </Text>
-            <Input
-              inputContainerStyle={{
-                backgroundColor: "#fff",
-                padding: 2,
-                borderRadius: 7,
-              }}
-              placeholder="Informe o procedimento"
-              errorStyle={{ fontSize: 16 }}
-              leftIcon={{ type: "font-awesome", name: "paragraph" }}
-              onChangeText={(value) => {
-                setDesc(value);
-                setErrorDesc("");
-              }}
-              errorMessage={errorDesc}
-            />
+            <View style={styles.containerMask}>
+              <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
+              <ModalSelector
+               style={styles.inputMask}
+                    data={servicos.map((servico) => {
+                        return ({
+                            key: servico.id,
+                            label: servico.nome
+                        });
+                      })}
+                    initValue=""
+                    onChange={(option)=>{
+                      setServicoSelecionado(option.key);
+                      setServicoNameSelecionado(option.label)
+                      servicos.filter(function(obj) {
+                          if(option.key == obj.id){
+                            setValor(obj.valor);
+                            return;
+                          }
+                      });
+                    }}
+              >
+              <TextInput
+                        style={styles.inputMask}
+                        editable={false}
+                        placeholder="Selecione um servico"
+                        value={servicoNameSelecionado} />
+              </ModalSelector>
+            </View>
+            <Text style={styles.errorMsg}>{errorServicoSelecionado}</Text>
 
             <Text h4 style={styles.label}>
               Valor:
