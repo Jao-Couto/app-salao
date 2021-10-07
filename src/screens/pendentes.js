@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import pagoService from '../service/pagoService';
 import pendentesService from '../service/pendentesService';
 import NotificarWhatsApp from './notificarWhatsApp';
-
+import Moment from 'moment';
 
 export default function Pendentes({route}) {
     const [pendentes, setPendentes] = useState([]);
@@ -68,9 +68,14 @@ export default function Pendentes({route}) {
       listar()
     }, []);
 
+    const formataData = (data) =>{
+      Moment.locale('pt-br');
+      return Moment(data).format('DD/MM/YYYY')
+    }
 
-
-
+    const ApenasNumeros= (num)=>{
+      return '55'+num.replace(/([^\d])+/gim, '');
+    }
 
   return(
         <LinearGradient
@@ -85,11 +90,12 @@ export default function Pendentes({route}) {
             <View style={styles.alinhaBotao} key={pendente.pendentes_id}>
               <View style={styles.texto}  > 
                 <Text h4>Cliente: {(pendente.cliente_nome)}</Text>
-                <Text style={{fontSize:18}}>Data: {(pendente.data).split("T")[0]}</Text>
+                <Text style={{fontSize:18}}>Data: {formataData(pendente.data)}</Text>
                 <Text style={{fontSize:18}}>Hora: {(pendente.hora).substring(0,5)}</Text>
-                <Text style={{fontSize:18}}>Descrição: {pendente.descricao}</Text>
+                <Text style={{fontSize:18}}>Descrição: {pendente.servico}</Text>
                 <Text style={{fontSize:18}}>R$ {parseFloat(pendente.valor).toFixed(2).replace(".", ",")}</Text>
               </View>
+              
               <View style={{justifyContent:'space-around'}}>
               <Button
                   buttonStyle={{borderRadius: 10, margin: 2}}
@@ -97,8 +103,11 @@ export default function Pendentes({route}) {
                     title="Pago"
                     onPress={() => pago(pendente.pendentes_id)}
                 />
+                <NotificarWhatsApp num={
+                  ApenasNumeros(pendente.cliente_celular)
+                  } texto={"Pagamento pendente do serviço "+pendente.servico+" no valor de "+parseFloat(pendente.valor).toFixed(2).replace(".", ",")}></NotificarWhatsApp>
                 <Button
-                    buttonStyle={{borderRadius: 10, margin: 2}}
+                    buttonStyle={{borderRadius: 10, margin: 2, backgroundColor: 'red'}}
                     titleStyle={{fontSize: 12}}
                     title="Deletar"
                     onPress={() => deletar(pendente.pendentes_id)}

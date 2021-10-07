@@ -78,16 +78,11 @@ export default function Marcar({ navigation, route }) {
 
   const cadastrar = () => {
     if (validar()) {
-      let aux = valor.substring(2);
-      aux = aux.replace(".", "");
-      aux = aux.replace(",", ".");
-      console.log(aux);
       let data = {
         cliente: clienteSelecionado,
         data: route.params.dataSql,
         hora: hora,
-        descricao: servicoSelecionado,
-        valor: aux,
+        servico: servicoSelecionado
       };
       atendimentoService
         .marcarHora(data)

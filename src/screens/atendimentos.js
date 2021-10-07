@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import pagoService from '../service/pagoService';
 import pendentesService from '../service/pendentesService';
-import Notificar from './notificarWhatsApp';
+import NotificarWhatsApp from './notificarWhatsApp';
 
 
 export default function Atendimentos({navigation, route}) {
@@ -120,9 +120,9 @@ export default function Atendimentos({navigation, route}) {
                 <Text style={{fontSize:18}}>Hora: {(atendimento.hora).substring(0,5)}</Text>
                 <Text style={{fontSize:18}}>Descrição: {atendimento.descricao}</Text>
                 <Text style={{fontSize:18}}>R$ {parseFloat(atendimento.valor).toFixed(2).replace(".", ",")}</Text>
-                <Notificar num={
+                <NotificarWhatsApp num={
                   ApenasNumeros(atendimento.celular)
-                  } texto='Atendimento marcado para o dia 23/09/2021! Confirmar comparacimento.'></Notificar>
+                  } texto='Atendimento marcado para o dia 23/09/2021! Confirmar comparacimento.'></NotificarWhatsApp>
               </View>
               <View style={{justifyContent:'space-around'}}>
               <Button
@@ -138,7 +138,7 @@ export default function Atendimentos({navigation, route}) {
                     onPress={() => pendente(atendimento.id)}
                 />
                 <Button
-                    buttonStyle={{borderRadius: 10, margin: 2}}
+                    buttonStyle={{borderRadius: 10, margin: 2, backgroundColor: 'red'}}
                     titleStyle={{fontSize: 12}}
                     title="Deletar"
                     onPress={() => deletar(atendimento.id)}
