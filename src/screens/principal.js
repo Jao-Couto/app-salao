@@ -20,6 +20,10 @@ export default function Principal({navigation}) {
     navigation.navigate("Pagos")
   }
 
+  const servicos = () =>{
+    navigation.navigate("Serviços")
+  }
+
 
   return (
     <LinearGradient
@@ -50,6 +54,18 @@ export default function Principal({navigation}) {
           }
           title=" Pendentes"
           onPress={()=>pendentes()}
+        />
+        <Button
+        buttonStyle={styles.botao}
+          icon={
+            <Icon
+              name="wrench"
+              size={15}
+              color="white"
+            />
+          }
+          title=" Serviços"
+          onPress={()=>servicos()}
         />
       </View>
     </LinearGradient>

@@ -30,7 +30,7 @@ export default function MyTabs() {
         name="Principal"
         component={Principal}
         options={{
-          tabBarLabel: 'Finanças',
+          tabBarLabel: 'Menu',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="cash-register" color={color} size={size} />
           ),

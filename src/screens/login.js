@@ -53,6 +53,7 @@ export default function Login({navigation}) {
           Alert.alert("ERRO!", "Email e/ou senha incorretos",[
             {text: 'OK'}
           ])
+          setPassword("");
       })
       .catch((error)=>{
         console.log(error);
@@ -75,7 +76,7 @@ export default function Login({navigation}) {
         colors={['#b23dff', '#782bab', '#2e034a']}
         style={styles.container}>
       <View style={styles.logo}>
-        <Text h2 style={styles.loginTit}>Meire Cabeleleira</Text>
+        <Text h2 style={styles.loginTit}>Serviços Hora Certa</Text>
         <Image source={require("../../assets/icon.png")} style={{width: 150, height: 150 }}>
       </Image>
       </View>

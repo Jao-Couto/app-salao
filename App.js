@@ -12,7 +12,8 @@ import Marcar from './src/screens/marcarAtendimento';
 import Pendentes from './src/screens/pendentes';
 import Pagos from './src/screens/pagos';
 import CadastroUsuario from './src/screens/cadastroUsuario';
-
+import CadastroServiços from './src/screens/cadastroServicos';
+import Serviços from './src/screens/servicos';
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,8 @@ const Stack = createStackNavigator();
         <Stack.Screen name="Pendentes" component={Pendentes} />
         <Stack.Screen name="Pagos" component={Pagos} />
         <Stack.Screen name="CadastroUsuario" component={CadastroUsuario} />
+        <Stack.Screen name="CadastroServiços" component={CadastroServiços} />
+        <Stack.Screen name="Serviços" component={Serviços} />
       </Stack.Navigator>
     );
   }

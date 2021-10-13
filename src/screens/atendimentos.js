@@ -16,7 +16,6 @@ export default function Atendimentos({navigation, route}) {
     
     let countRef = useRef(0);
 
-    console.log("inicio "+countRef.current);
     const entrar = ()=>{
         navigation.navigate("Marcar", {data: route.params.data, dataSql: route.params.dataSql, num: countRef.current})
     }
@@ -94,7 +93,7 @@ export default function Atendimentos({navigation, route}) {
 
     if(route.params.num != undefined)
       countRef.current = route.params.num;
-    console.log("depois "+countRef.current);
+      
     useEffect(()=>{
       listar()
     },[countRef.current]);
