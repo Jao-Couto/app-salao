@@ -4,13 +4,14 @@ import styles from '../style';
 import { Text, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { LinearGradient } from 'expo-linear-gradient';
+import Globais from '../globais';
 
 
 
 
-export default function Principal({navigation}) {
+export default function Principal({ navigation }) {
 
-  
+
 
   const pendentes = () => {
     navigation.navigate("Pendentes")
@@ -20,15 +21,21 @@ export default function Principal({navigation}) {
     navigation.navigate("Pagos")
   }
 
-  const servicos = () =>{
+  const servicos = () => {
     navigation.navigate("Serviços")
   }
+
+  const sair = () => {
+    Globais.user = ""
+    navigation.navigate("Login")
+  }
+
 
 
   return (
     <LinearGradient
-    colors={['#b23dff', '#782bab', '#2e034a']}
-    style={[styles.safeArea, styles.container]}>
+      colors={['#b23dff', '#782bab', '#2e034a']}
+      style={[styles.safeArea, styles.container]}>
       <View style={styles.buttonArea}>
         <Button
           buttonStyle={styles.botao}
@@ -42,9 +49,9 @@ export default function Principal({navigation}) {
           title=" Pagos"
           onPress={() => pagos()}
         />
-        
+
         <Button
-        buttonStyle={styles.botao}
+          buttonStyle={styles.botao}
           icon={
             <Icon
               name="users"
@@ -52,11 +59,11 @@ export default function Principal({navigation}) {
               color="red"
             />
           }
-          title=" Pendentes"
-          onPress={()=>pendentes()}
+          title=" Fiado"
+          onPress={() => pendentes()}
         />
         <Button
-        buttonStyle={styles.botao}
+          buttonStyle={styles.botao}
           icon={
             <Icon
               name="wrench"
@@ -65,7 +72,19 @@ export default function Principal({navigation}) {
             />
           }
           title=" Serviços"
-          onPress={()=>servicos()}
+          onPress={() => servicos()}
+        />
+        <Button
+          buttonStyle={styles.botao}
+          icon={
+            <Icon
+              name="sign-out-alt"
+              size={15}
+              color="red"
+            />
+          }
+          title=" Sair"
+          onPress={() => sair()}
         />
       </View>
     </LinearGradient>
