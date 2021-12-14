@@ -1,50 +1,50 @@
 import axios from "axios"
 
-class UsuarioService{
+class UsuarioService {
 
-    async cadastrarUsuario(data){
+    async cadastrarUsuario(data) {
         return axios({
-            url: "http://192.168.1.240:3000/usuario/cadastrar",
+            url: "http://192.168.1.248:3000/usuario/cadastrar",
             method: "POST",
             timeout: 5000,
             data: data,
-            header:{
+            header: {
                 Accept: 'application/json'
             }
-        }).then((response)=>{
+        }).then((response) => {
             return Promise.resolve(response)
-        }).catch((error)=>{
+        }).catch((error) => {
             return Promise.reject(error)
         })
     }
 
-    async loginUsuario(data){
+    async loginUsuario(data) {
         return axios({
-            url: "http://192.168.1.240:3000/usuario/login",
+            url: "http://192.168.1.248:3000/usuario/login",
             method: "POST",
-            timeout: 5000,
+            timeout: 10000,
             data: data,
-            header:{
+            header: {
                 Accept: 'application/json'
             }
-        }).then((response)=>{
+        }).then((response) => {
             return Promise.resolve(response)
-        }).catch((error)=>{
+        }).catch((error) => {
             return Promise.reject(error)
         })
     }
 
-    async listarUsuario(){
+    async listarUsuario() {
         return axios({
-            url: "http://192.168.1.240:3000/usuario/listar",
+            url: "http://192.168.1.248:3000/usuario/listar",
             method: "GET",
             timeout: 5000,
-            header:{
+            header: {
                 Accept: 'application/json'
             }
-        }).then((response)=>{
+        }).then((response) => {
             return Promise.resolve(response)
-        }).catch((error)=>{
+        }).catch((error) => {
             return Promise.reject(error)
         })
     }

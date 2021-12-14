@@ -1,7 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, TextInput } from "react-native";
-import { Alert, View} from "react-native";
+import { Alert, View } from "react-native";
 import { Text, Button } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextInputMask } from "react-native-masked-text";
@@ -18,8 +18,13 @@ export default function Marcar({ navigation, route }) {
   const [errorClienteSelecionado, setErrorClienteSelecionado] = useState("");
   const [clienteNameSelecionado, setClienteNameSelecionado] = useState("");
 
-  const [hora, setHora] = useState("");
-  const [errorHora, setErrorHora] = useState("");
+  const [horaSelecionado, setHoraSelecionado] = useState("");
+  const [errorHoraSelecionado, setErrorHoraSelecionado] = useState("");
+  const [horaNameSelecionado, setHoraNameSelecionado] = useState("");
+
+  const horas = ['7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'];
+  const [times, setTimes] = useState([])
+
 
   const [servicos, setServicos] = useState([]);
   const [servicoSelecionado, setServicoSelecionado] = useState("");
@@ -29,10 +34,9 @@ export default function Marcar({ navigation, route }) {
   const [valor, setValor] = useState("");
   const [errorValor, setErrorValor] = useState("");
 
-  let horaField = null;
   let valorField = null;
 
-  useEffect(()=>{
+  useEffect(() => {
     clienteService.listarClientes()
       .then((response) => {
         setClientes(response.data);
@@ -44,32 +48,67 @@ export default function Marcar({ navigation, route }) {
       });
 
     servicosService.listarServicos()
-    .then((response)=>{
-      setServicos(response.data);
-      console.log("Listado Serviços com sucesso");
-    }).catch((error)=>{
-      console.log(error);
-      console.log("Erro ao Listar Serviços");
-    })
+      .then((response) => {
+        setServicos(response.data);
+        console.log("Listado Serviços com sucesso");
+      }).catch((error) => {
+        console.log(error);
+        console.log("Erro ao Listar Serviços");
+      })
 
-  },[]);
+    atendimentoService.listarHora(route.params.dataSql)
+      .then((response) => {
+        setHorarios(response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+        console.log("Erro ao Listar")
+      })
+
+
+
+
+  }, []);
+
+
+  const setHorarios = (data) => {
+    let horario
+    let igual
+    let time = []
+    for (let hora in horas) {
+      for (let min = 0; min < 60; min += 10) {
+        horario = ('0' + horas[hora]).slice(-2) + ':' + ('0' + min).slice(-2)
+        igual = data.filter((item) => {
+          return horario + ':00' == item.hora
+        })
+
+        if (igual.length == 0) {
+          time.push(
+            {
+              key: horario + ':00',
+              label: horario
+            })
+        }
+
+
+      }
+    }
+    setTimes(time)
+  }
+
 
   const validar = () => {
     let error = true;
-    if (!horaField.isValid()) {
-      setErrorHora("Hora inválida");
-      error = false;
-    }
     if (servicoSelecionado == "") {
-      setErrorServicoSelecionado("Servico inválido");
+      setErrorServicoSelecionado("Serviço inválido");
       error = false;
     }
     if (clienteSelecionado == "") {
-      setErrorClienteSelecionado("Servico inválido");
+      setErrorClienteSelecionado("Cliente inválido");
       error = false;
     }
-    if (!valorField.isValid()) {
-      setErrorValor("Valor inválido");
+    if (horaSelecionado == "") {
+      setErrorHoraSelecionado("Valor inválido");
       error = false;
     }
 
@@ -81,14 +120,14 @@ export default function Marcar({ navigation, route }) {
       let data = {
         cliente: clienteSelecionado,
         data: route.params.dataSql,
-        hora: hora,
+        hora: horaSelecionado,
         servico: servicoSelecionado
       };
       atendimentoService
         .marcarHora(data)
         .then((response) => {
           Alert.alert("Sucesso!", "Atendimento marcado", [{ text: "OK" }]);
-          navigation.navigate("Atendimentos", {data: route.params.data, dataSql: route.params.dataSql, num: route.params.num+2})
+          navigation.navigate("Atendimentos", { data: route.params.data, dataSql: route.params.dataSql, num: route.params.num + 2 })
         })
         .catch((error) => {
           console.log(error);
@@ -118,57 +157,50 @@ export default function Marcar({ navigation, route }) {
             <View style={styles.containerMask}>
               <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
               <ModalSelector
-               style={styles.inputMask}
-                    data={clientes.map((cliente) => {
-                        return ({
-                            key: cliente.id,
-                            label: cliente.nome
-                        });
-                      })}
-                    initValue=""
-                    onChange={(option)=>{
-                      setClienteSelecionado(option.key);
-                      setClienteNameSelecionado(option.label)
-                    }} 
-                    
+                style={styles.inputMask}
+                data={clientes.map((cliente) => {
+                  return ({
+                    key: cliente.id,
+                    label: cliente.nome
+                  });
+                })}
+                initValue=""
+                onChange={(option) => {
+                  setClienteSelecionado(option.key);
+                  setClienteNameSelecionado(option.label)
+                }}
               >
-              <TextInput
-                        style={styles.inputMask}
-                        editable={false}
-                        placeholder="Selecione um cliente"
-                        value={clienteNameSelecionado} />
-                  </ModalSelector>
+                <TextInput
+                  style={styles.inputMask}
+                  editable={false}
+                  placeholder="Selecione um cliente"
+                  value={clienteNameSelecionado} />
+              </ModalSelector>
             </View>
             <Text style={styles.errorMsg}>{errorClienteSelecionado}</Text>
 
             <Text h4 style={styles.label}>
               Horário:
-            </Text>
-            <View style={styles.containerMask}>
-              <Icon type="font-awesome" name="clock" style={styles.icon}></Icon>
-              <TextInputMask
-                options={{
-                  mask: "99:99",
-                  validator: function (val, settings) {
-                    let horas = val.split(":");
-                    if (horas[0] < 24 && horas[1] < 60) return true;
-                    else return false;
-                  },
-                }}
+            </Text><View style={styles.containerMask}>
+              <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
+              <ModalSelector
                 style={styles.inputMask}
-                placeholder=" Insira o horário"
-                type={"custom"}
-                value={hora}
-                onChangeText={(value) => {
-                  setHora(value);
-                  setErrorHora("");
+                data={times}
+                initValue=""
+                onChange={(option) => {
+                  setHoraSelecionado(option.key);
+                  setHoraNameSelecionado(option.label)
                 }}
-                keyboardType="number-pad"
-                returnKeyType="done"
-                ref={(ref) => (horaField = ref)}
-              />
+              >
+                <TextInput
+                  style={styles.inputMask}
+                  editable={false}
+                  placeholder="Selecione um hora"
+                  value={horaNameSelecionado} />
+              </ModalSelector>
             </View>
-            <Text style={styles.errorMsg}>{errorHora}</Text>
+            <Text style={styles.errorMsg}>{errorHoraSelecionado}</Text>
+
 
             <Text h4 style={styles.label}>
               Serviço:
@@ -176,30 +208,30 @@ export default function Marcar({ navigation, route }) {
             <View style={styles.containerMask}>
               <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
               <ModalSelector
-               style={styles.inputMask}
-                    data={servicos.map((servico) => {
-                        return ({
-                            key: servico.id,
-                            label: servico.nome
-                        });
-                      })}
-                    initValue=""
-                    onChange={(option)=>{
-                      setServicoSelecionado(option.key);
-                      setServicoNameSelecionado(option.label)
-                      servicos.filter(function(obj) {
-                          if(option.key == obj.id){
-                            setValor(obj.valor);
-                            return;
-                          }
-                      });
-                    }}
+                style={styles.inputMask}
+                data={servicos.map((servico) => {
+                  return ({
+                    key: servico.id,
+                    label: servico.nome
+                  });
+                })}
+                initValue=""
+                onChange={(option) => {
+                  setServicoSelecionado(option.key);
+                  setServicoNameSelecionado(option.label)
+                  servicos.filter(function (obj) {
+                    if (option.key == obj.id) {
+                      setValor(obj.valor);
+                      return;
+                    }
+                  });
+                }}
               >
-              <TextInput
-                        style={styles.inputMask}
-                        editable={false}
-                        placeholder="Selecione um servico"
-                        value={servicoNameSelecionado} />
+                <TextInput
+                  style={styles.inputMask}
+                  editable={false}
+                  placeholder="Selecione um servico"
+                  value={servicoNameSelecionado} />
               </ModalSelector>
             </View>
             <Text style={styles.errorMsg}>{errorServicoSelecionado}</Text>

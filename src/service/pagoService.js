@@ -1,65 +1,65 @@
 import axios from "axios"
 import Globais from "../globais"
 
-class PagoService{
+class PagoService {
 
-    async cadastrar(data){
+    async cadastrar(data) {
         return axios({
-            url: "http://192.168.1.240:3000/pagos/cadastrar",
+            url: "http://192.168.1.248:3000/pagos/cadastrar",
             method: "POST",
             timeout: 5000,
             data: data,
-            header:{
+            header: {
                 Accept: 'application/json'
             }
-        }).then((response)=>{
+        }).then((response) => {
             return Promise.resolve(response)
-        }).catch((error)=>{
+        }).catch((error) => {
             return Promise.reject(error)
         })
     }
 
-    async listar(){
+    async listar() {
         return axios({
-            url: "http://192.168.1.240:3000/pagos/listar"+Globais.user,
+            url: "http://192.168.1.248:3000/pagos/listar" + Globais.user,
             method: "GET",
             timeout: 5000,
-            header:{
+            header: {
                 Accept: 'application/json'
             }
-        }).then((response)=>{
+        }).then((response) => {
             return Promise.resolve(response)
-        }).catch((error)=>{
+        }).catch((error) => {
             return Promise.reject(error)
         })
     }
 
-    async listarData(data){
+    async listarData(data) {
         return axios({
-            url: "http://192.168.1.240:3000/pagos/data/"+data,
+            url: "http://192.168.1.248:3000/pagos/data/" + data,
             method: "GET",
             timeout: 5000,
-            header:{
+            header: {
                 Accept: 'application/json'
             }
-        }).then((response)=>{
+        }).then((response) => {
             return Promise.resolve(response)
-        }).catch((error)=>{
+        }).catch((error) => {
             return Promise.reject(error)
         })
     }
 
-    async listarId(data){
+    async listarId(data) {
         return axios({
-            url: "http://192.168.1.240:3000/pagos/id/"+data,
+            url: "http://192.168.1.248:3000/pagos/id/" + data,
             method: "GET",
             timeout: 5000,
-            header:{
+            header: {
                 Accept: 'application/json'
             }
-        }).then((response)=>{
+        }).then((response) => {
             return Promise.resolve(response)
-        }).catch((error)=>{
+        }).catch((error) => {
             return Promise.reject(error)
         })
     }

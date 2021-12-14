@@ -1,65 +1,65 @@
 import axios from "axios"
 import Globais from "../globais"
 
-class ServicosService{
+class ServicosService {
 
-    async cadastrarServico(data){
+    async cadastrarServico(data) {
         return axios({
-            url: "http://192.168.1.240:3000/servicos/cadastrar",
+            url: "http://192.168.1.248:3000/servicos/cadastrar",
             method: "POST",
             timeout: 5000,
             data: data,
-            header:{
+            header: {
                 Accept: 'application/json'
             }
-        }).then((response)=>{
+        }).then((response) => {
             return Promise.resolve(response)
-        }).catch((error)=>{
+        }).catch((error) => {
             return Promise.reject(error)
         })
     }
 
-    async listarServicos(){
+    async listarServicos() {
         return axios({
-            url: "http://192.168.1.240:3000/servicos/listar/"+Globais.user,
+            url: "http://192.168.1.248:3000/servicos/listar/" + Globais.user,
             method: "GET",
             timeout: 5000,
-            header:{
+            header: {
                 Accept: 'application/json'
             }
-        }).then((response)=>{
+        }).then((response) => {
             return Promise.resolve(response)
-        }).catch((error)=>{
+        }).catch((error) => {
             return Promise.reject(error)
         })
     }
 
-    async listarId(data){
+    async listarId(data) {
         return axios({
-            url: "http://192.168.1.240:3000/servicos/id/"+data,
+            url: "http://192.168.1.248:3000/servicos/id/" + data,
             method: "GET",
             timeout: 5000,
-            header:{
+            header: {
                 Accept: 'application/json'
             }
-        }).then((response)=>{
+        }).then((response) => {
             return Promise.resolve(response)
-        }).catch((error)=>{
+        }).catch((error) => {
             return Promise.reject(error)
         })
     }
 
-    async deletarId(data){
+    async deletarId(data) {
         return axios({
-            url: "http://192.168.1.240:3000/servicos/delete/"+data,
+            url: "http://192.168.1.248:3000/servicos/delete/" + data,
             method: "DELETE",
             timeout: 5000,
-            header:{
+            header: {
                 Accept: 'application/json'
             }
-        }).then((response)=>{
+        }).then((response) => {
             return Promise.resolve(response)
-        }).catch((error)=>{
+        }).catch((error) => {
             return Promise.reject(error)
         })
     }
