@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { KeyboardAvoidingView, TextInput } from "react-native";
 import { Alert, View } from "react-native";
 import { Text, Button } from "react-native-elements";
@@ -10,7 +10,10 @@ import atendimentoService from "../service/atendimentoService";
 import clienteService from "../service/clienteService";
 import servicosService from "../service/servicosService"
 import styles from "../style";
-import ModalSelector from 'react-native-modal-selector-searchable'
+import ModalSelector from 'react-native-modal-selector-searchable';
+import SelectBox from 'react-native-multi-selectbox'
+import { xorBy } from 'lodash'
+import servicoMarcar from "../service/servicoMarcarService";
 
 export default function Marcar({ navigation, route }) {
   const [clientes, setClientes] = useState([]);
@@ -27,9 +30,9 @@ export default function Marcar({ navigation, route }) {
 
 
   const [servicos, setServicos] = useState([]);
-  const [servicoSelecionado, setServicoSelecionado] = useState("");
+  const [servicoSelecionado, setServicoSelecionado] = useState([]);
   const [errorServicoSelecionado, setErrorServicoSelecionado] = useState("");
-  const [servicoNameSelecionado, setServicoNameSelecionado] = useState("");
+  let countRef = useRef(0);
 
   const [valor, setValor] = useState("");
   const [errorValor, setErrorValor] = useState("");
@@ -70,6 +73,21 @@ export default function Marcar({ navigation, route }) {
 
   }, []);
 
+  useEffect(() => {
+    let val = 0
+    servicos.map((servico) => {
+      servicoSelecionado.map((sele) => {
+        if (servico.id == sele.id) {
+          val += servico.valor
+        }
+      })
+
+    })
+    console.log(val);
+
+    setValor(val)
+
+  }, [countRef.current]);
 
   const setHorarios = (data) => {
     let horario
@@ -121,11 +139,18 @@ export default function Marcar({ navigation, route }) {
         cliente: clienteSelecionado,
         data: route.params.dataSql,
         hora: horaSelecionado,
-        servico: servicoSelecionado
+        valor: valor
       };
       atendimentoService
         .marcarHora(data)
         .then((response) => {
+          servicoSelecionado.map((elem) => {
+            data = {
+              "atendimento": parseInt(response.data.mensagem),
+              "servico": parseInt(elem.id)
+            }
+            servicoMarcar.marcarServico(data)
+          })
           Alert.alert("Sucesso!", "Atendimento marcado", [{ text: "OK" }]);
           navigation.navigate("Atendimentos", { data: route.params.data, dataSql: route.params.dataSql, num: route.params.num + 2 })
         })
@@ -136,6 +161,14 @@ export default function Marcar({ navigation, route }) {
     }
   };
 
+  function onMultiChange() {
+    return (item) => {
+      setServicoSelecionado(xorBy(servicoSelecionado, [item], 'id'))
+      countRef.current++
+    }
+
+  }
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -145,137 +178,124 @@ export default function Marcar({ navigation, route }) {
         colors={["#b23dff", "#782bab", "#2e034a"]}
         style={styles.safeArea}
       >
-        <ScrollView>
-          <View style={styles.container}>
-            <Text h1 style={styles.loginTit}>
-              Marcar Atendimento
-            </Text>
+        <View style={styles.container}>
+          <Text h1 style={styles.loginTit}>
+            Marcar Atendimento
+          </Text>
 
-            <Text h4 style={styles.label}>
-              Cliente:
-            </Text>
-            <View style={styles.containerMask}>
-              <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
-              <ModalSelector
+          <Text h4 style={styles.label}>
+            Cliente:
+          </Text>
+          <View style={styles.containerMask}>
+            <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
+            <ModalSelector
+              style={styles.inputMask}
+              data={clientes.map((cliente) => {
+                return ({
+                  key: cliente.id,
+                  label: cliente.nome
+                });
+              })}
+              initValue=""
+              onChange={(option) => {
+                setClienteSelecionado(option.key);
+                setClienteNameSelecionado(option.label)
+              }}
+            >
+              <TextInput
                 style={styles.inputMask}
-                data={clientes.map((cliente) => {
-                  return ({
-                    key: cliente.id,
-                    label: cliente.nome
-                  });
-                })}
-                initValue=""
-                onChange={(option) => {
-                  setClienteSelecionado(option.key);
-                  setClienteNameSelecionado(option.label)
-                }}
-              >
-                <TextInput
-                  style={styles.inputMask}
-                  editable={false}
-                  placeholder="Selecione um cliente"
-                  value={clienteNameSelecionado} />
-              </ModalSelector>
-            </View>
-            <Text style={styles.errorMsg}>{errorClienteSelecionado}</Text>
+                editable={false}
+                placeholder="Selecione um cliente"
+                value={clienteNameSelecionado} />
+            </ModalSelector>
+          </View>
+          <Text style={styles.errorMsg}>{errorClienteSelecionado}</Text>
 
-            <Text h4 style={styles.label}>
-              Horário:
-            </Text><View style={styles.containerMask}>
-              <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
-              <ModalSelector
+          <Text h4 style={styles.label}>
+            Horário:
+          </Text><View style={styles.containerMask}>
+            <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
+            <ModalSelector
+              style={styles.inputMask}
+              data={times}
+              initValue=""
+              onChange={(option) => {
+                setHoraSelecionado(option.key);
+                setHoraNameSelecionado(option.label)
+              }}
+            >
+              <TextInput
                 style={styles.inputMask}
-                data={times}
-                initValue=""
-                onChange={(option) => {
-                  setHoraSelecionado(option.key);
-                  setHoraNameSelecionado(option.label)
-                }}
-              >
-                <TextInput
-                  style={styles.inputMask}
-                  editable={false}
-                  placeholder="Selecione um hora"
-                  value={horaNameSelecionado} />
-              </ModalSelector>
-            </View>
-            <Text style={styles.errorMsg}>{errorHoraSelecionado}</Text>
+                editable={false}
+                placeholder="Selecione um hora"
+                value={horaNameSelecionado} />
+            </ModalSelector>
+          </View>
+          <Text style={styles.errorMsg}>{errorHoraSelecionado}</Text>
 
 
-            <Text h4 style={styles.label}>
-              Serviço:
-            </Text>
-            <View style={styles.containerMask}>
-              <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
-              <ModalSelector
-                style={styles.inputMask}
-                data={servicos.map((servico) => {
-                  return ({
-                    key: servico.id,
-                    label: servico.nome
-                  });
-                })}
-                initValue=""
-                onChange={(option) => {
-                  setServicoSelecionado(option.key);
-                  setServicoNameSelecionado(option.label)
-                  servicos.filter(function (obj) {
-                    if (option.key == obj.id) {
-                      setValor(obj.valor);
-                      return;
-                    }
-                  });
-                }}
-              >
-                <TextInput
-                  style={styles.inputMask}
-                  editable={false}
-                  placeholder="Selecione um servico"
-                  value={servicoNameSelecionado} />
-              </ModalSelector>
-            </View>
-            <Text style={styles.errorMsg}>{errorServicoSelecionado}</Text>
-
-            <Text h4 style={styles.label}>
-              Valor:
-            </Text>
-            <View style={styles.containerMask}>
-              <Icon
-                type="font-awesome"
-                name="money-bill-wave"
-                style={styles.icon}
-              ></Icon>
-              <TextInputMask
-                style={styles.inputMask}
-                placeholder=" Insira o valor"
-                type={"money"}
-                options={{
-                  precision: 2,
-                  separator: ",",
-                  delimiter: ".",
-                  unit: "R$",
-                  suffixUnit: "",
-                }}
-                value={valor}
-                onChangeText={(value) => {
-                  setValor(value);
-                  setErrorValor("");
-                }}
-                keyboardType="number-pad"
-                returnKeyType="done"
-                ref={(ref) => (valorField = ref)}
-              />
-            </View>
-            <Text style={styles.errorMsg}>{errorValor}</Text>
-
-            <Button
-              buttonStyle={{ marginBottom: 50 }}
-              icon={<Icon name="plus" size={15} color="white" />}
-              title=" Marcar"
-              onPress={() => cadastrar()}
+          <Text h4 style={styles.label}>
+            Serviço:
+          </Text>
+          <View style={styles.containerMask}>
+            <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
+            <SelectBox
+              style={styles.inputMask}
+              label=""
+              options={servicos.map((servico) => {
+                return {
+                  item: servico.nome + ' - ' + servico.valor,
+                  id: servico.id,
+                }
+              })}
+              selectedValues={servicoSelecionado}
+              onMultiSelect={onMultiChange()}
+              onTapClose={onMultiChange()}
+              isMulti
+              inputPlaceholder="Selecionar Serviço"
             />
           </View>
-        </ScrollView>
+          <Text style={styles.errorMsg}>{errorServicoSelecionado}</Text>
+
+          <Text h4 style={styles.label}>
+            Valor:
+          </Text>
+          <View style={styles.containerMask}>
+            <Icon
+              type="font-awesome"
+              name="money-bill-wave"
+              style={styles.icon}
+            ></Icon>
+            <TextInputMask
+              style={styles.inputMask}
+              placeholder=" Insira o valor"
+              type={"money"}
+              options={{
+                precision: 2,
+                separator: ",",
+                delimiter: ".",
+                unit: "R$",
+                suffixUnit: "",
+              }}
+              value={valor}
+              onChangeText={(value) => {
+                setValor(value);
+                setErrorValor("");
+              }}
+              keyboardType="number-pad"
+              returnKeyType="done"
+              ref={(ref) => (valorField = ref)}
+            />
+          </View>
+          <Text style={styles.errorMsg}>{errorValor}</Text>
+
+          <Button
+            buttonStyle={{ marginBottom: 50 }}
+            icon={<Icon name="plus" size={15} color="white" />}
+            title=" Marcar"
+            onPress={() => cadastrar()}
+          />
+        </View>
       </LinearGradient>
     </KeyboardAvoidingView>
   );
