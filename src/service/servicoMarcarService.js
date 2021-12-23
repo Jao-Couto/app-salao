@@ -19,54 +19,9 @@ class ServicoMarcar {
         })
     }
 
-    async listarAtendimentos() {
-        return axios({
-            url: "http://192.168.1.248:3000/atendimentos/listar" + Globais.user,
-            method: "GET",
-            timeout: 5000,
-            header: {
-                Accept: 'application/json'
-            }
-        }).then((response) => {
-            return Promise.resolve(response)
-        }).catch((error) => {
-            return Promise.reject(error)
-        })
-    }
-
-    async listarData(data) {
-        return axios({
-            url: "http://192.168.1.248:3000/atendimentos/data" + Globais.user + "/" + data,
-            method: "GET",
-            timeout: 5000,
-            header: {
-                Accept: 'application/json'
-            }
-        }).then((response) => {
-            return Promise.resolve(response)
-        }).catch((error) => {
-            return Promise.reject(error)
-        })
-    }
-
-    async listarHora(data) {
-        return axios({
-            url: "http://192.168.1.248:3000/atendimentos/hora" + Globais.user + "/" + data,
-            method: "GET",
-            timeout: 5000,
-            header: {
-                Accept: 'application/json'
-            }
-        }).then((response) => {
-            return Promise.resolve(response)
-        }).catch((error) => {
-            return Promise.reject(error)
-        })
-    }
-
     async listarId(data) {
         return axios({
-            url: "http://192.168.1.248:3000/atendimentos/id/" + data,
+            url: "http://192.168.1.248:3000/servicosMarcados/listar/" + data,
             method: "GET",
             timeout: 5000,
             header: {
@@ -81,7 +36,7 @@ class ServicoMarcar {
 
     async deletarId(data) {
         return axios({
-            url: "http://192.168.1.248:3000/atendimentos/delete/" + data,
+            url: "http://192.168.1.248:3000/servicosMarcados/delete/" + data,
             method: "DELETE",
             timeout: 5000,
             header: {

@@ -9,13 +9,14 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import pagoService from '../service/pagoService';
 import pendentesService from '../service/pendentesService';
 import NotificarWhatsApp from './notificarWhatsApp';
+import servicoMarcar from '../service/servicoMarcarService';
 
 
 export default function Atendimentos({ navigation, route }) {
   const [atendimentos, setAtendimentos] = useState([]);
 
   let countRef = useRef(0);
-
+  let textoNoti = 'Atendimento marcado para o dia ' + route.params.data + '! Confirmar comparacimento.'
   const entrar = () => {
     navigation.navigate("Marcar", { data: route.params.data, dataSql: route.params.dataSql, num: countRef.current })
   }
@@ -112,39 +113,43 @@ export default function Atendimentos({ navigation, route }) {
           <View style={{ flexDirection: 'row' }}>
             <Text h3 style={styles.tit}>{route.params.data}</Text>
           </View>
-          {atendimentos.map(atendimento => (
-            <View style={styles.alinhaBotao} key={atendimento.id}>
-              <View style={styles.texto}  >
-                <Text h4>Cliente: {(atendimento.nome)}</Text>
-                <Text style={{ fontSize: 18 }}>Hora: {(atendimento.hora).substring(0, 5)}</Text>
-                <Text style={{ fontSize: 18 }}>Descrição: {atendimento.descricao}</Text>
-                <Text style={{ fontSize: 18 }}>R$ {parseFloat(atendimento.valorTotal).toFixed(2).replace(".", ",")}</Text>
-                <NotificarWhatsApp num={
-                  ApenasNumeros(atendimento.celular)
-                } texto='Atendimento marcado para o dia 23/09/2021! Confirmar comparacimento.'></NotificarWhatsApp>
+          {
+            atendimentos.map(atendimento =>
+            (
+              <View style={styles.alinhaBotao} key={atendimento.id}>
+                <View style={styles.texto}  >
+
+                  <Text h4>Cliente: {(atendimento.nome)}</Text>
+                  <Text style={{ fontSize: 18 }}>Hora: {(atendimento.hora).substring(0, 5)}</Text>
+                  <Text style={{ fontSize: 18 }}>Descrição: {atendimento.servicos}</Text>
+                  <Text style={{ fontSize: 18 }}>R$ {parseFloat(atendimento.valorTotal).toFixed(2).replace(".", ",")}</Text>
+                  <NotificarWhatsApp num={
+                    ApenasNumeros(atendimento.celular)
+                  } texto={textoNoti}></NotificarWhatsApp>
+                </View>
+                <View style={{ justifyContent: 'space-around' }}>
+                  <Button
+                    buttonStyle={{ borderRadius: 10, margin: 2 }}
+                    titleStyle={{ fontSize: 12 }}
+                    title="Pago"
+                    onPress={() => pago(atendimento.id)}
+                  />
+                  <Button
+                    buttonStyle={{ borderRadius: 10, margin: 2 }}
+                    titleStyle={{ fontSize: 12 }}
+                    title="Fiado"
+                    onPress={() => pendente(atendimento.id)}
+                  />
+                  <Button
+                    buttonStyle={{ borderRadius: 10, margin: 2, backgroundColor: 'red' }}
+                    titleStyle={{ fontSize: 12 }}
+                    title="Deletar"
+                    onPress={() => deletar(atendimento.id)}
+                  />
+                </View>
               </View>
-              <View style={{ justifyContent: 'space-around' }}>
-                <Button
-                  buttonStyle={{ borderRadius: 10, margin: 2 }}
-                  titleStyle={{ fontSize: 12 }}
-                  title="Pago"
-                  onPress={() => pago(atendimento.id)}
-                />
-                <Button
-                  buttonStyle={{ borderRadius: 10, margin: 2 }}
-                  titleStyle={{ fontSize: 12 }}
-                  title="Fiado"
-                  onPress={() => pendente(atendimento.id)}
-                />
-                <Button
-                  buttonStyle={{ borderRadius: 10, margin: 2, backgroundColor: 'red' }}
-                  titleStyle={{ fontSize: 12 }}
-                  title="Deletar"
-                  onPress={() => deletar(atendimento.id)}
-                />
-              </View>
-            </View>
-          ))}
+            )
+            )}
 
         </View>
         <View style={{ alignSelf: 'flex-end', marginRight: 10 }}>

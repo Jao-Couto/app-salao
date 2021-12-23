@@ -92,8 +92,8 @@ export default function Pendentes({ route }) {
                 <Text h4>Cliente: {(pendente.cliente_nome)}</Text>
                 <Text style={{ fontSize: 18 }}>Data: {formataData(pendente.data)}</Text>
                 <Text style={{ fontSize: 18 }}>Hora: {(pendente.hora).substring(0, 5)}</Text>
-                <Text style={{ fontSize: 18 }}>Descrição: {pendente.servico}</Text>
-                <Text style={{ fontSize: 18 }}>R$ {parseFloat(pendente.valor).toFixed(2).replace(".", ",")}</Text>
+                <Text style={{ fontSize: 18 }}>Descrição: {pendente.servicos}</Text>
+                <Text style={{ fontSize: 18 }}>R$ {parseFloat(pendente.valorTotal).toFixed(2).replace(".", ",")}</Text>
               </View>
 
               <View style={{ justifyContent: 'space-around' }}>
@@ -104,7 +104,7 @@ export default function Pendentes({ route }) {
                   onPress={() => pago(pendente.pendentes_id)}
                 />
                 <NotificarWhatsApp num={
-                  ApenasNumeros(pendente.cliente_celular)
+                  ApenasNumeros(pendente.celular)
                 } texto={"Pagamento pendente do serviço " + pendente.servico + " no valor de " + parseFloat(pendente.valor).toFixed(2).replace(".", ",")}></NotificarWhatsApp>
                 <Button
                   buttonStyle={{ borderRadius: 10, margin: 2, backgroundColor: 'red' }}
