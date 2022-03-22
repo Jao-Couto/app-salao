@@ -214,7 +214,7 @@ export default function Marcar({ navigation, route }) {
           <Text h4 style={styles.label}>
             Horário:
           </Text><View style={styles.containerMask}>
-            <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
+            <Icon type="font-awesome" name="clock" style={styles.icon}></Icon>
             <ModalSelector
               style={styles.inputMask}
               data={times}
@@ -238,7 +238,7 @@ export default function Marcar({ navigation, route }) {
             Serviço:
           </Text>
           <View style={styles.containerMask}>
-            <Icon type="font-awesome" name="user" style={styles.icon}></Icon>
+            <Icon type="font-awesome" name="wrench" style={styles.icon}></Icon>
             <SelectBox
               style={styles.inputMask}
               label=""

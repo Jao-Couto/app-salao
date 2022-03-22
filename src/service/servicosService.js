@@ -5,7 +5,7 @@ class ServicosService {
 
     async cadastrarServico(data) {
         return axios({
-            url: "http://192.168.1.248:3000/servicos/cadastrar",
+            url: "http://192.168.1.241:3000/servicos/cadastrar",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -21,7 +21,7 @@ class ServicosService {
 
     async listarServicos() {
         return axios({
-            url: "http://192.168.1.248:3000/servicos/listar/" + Globais.user,
+            url: "http://192.168.1.241:3000/servicos/listar/" + Globais.user,
             method: "GET",
             timeout: 5000,
             header: {
@@ -36,7 +36,7 @@ class ServicosService {
 
     async listarId(data) {
         return axios({
-            url: "http://192.168.1.248:3000/servicos/id/" + data,
+            url: "http://192.168.1.241:3000/servicos/id/" + data,
             method: "GET",
             timeout: 5000,
             header: {
@@ -51,7 +51,7 @@ class ServicosService {
 
     async deletarId(data) {
         return axios({
-            url: "http://192.168.1.248:3000/servicos/delete/" + data,
+            url: "http://192.168.1.241:3000/servicos/delete/" + data,
             method: "DELETE",
             timeout: 5000,
             header: {

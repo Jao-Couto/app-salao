@@ -5,7 +5,23 @@ class ClienteService {
 
     async cadastrarCliente(data) {
         return axios({
-            url: "http://192.168.1.248:3000/cliente/cadastrar",
+            url: "http://192.168.1.241:3000/cliente/cadastrar",
+            method: "POST",
+            timeout: 5000,
+            data: data,
+            header: {
+                Accept: 'application/json'
+            }
+        }).then((response) => {
+            return Promise.resolve(response)
+        }).catch((error) => {
+            return Promise.reject(error)
+        })
+    }
+
+    async atualizarCliente(data) {
+        return axios({
+            url: "http://192.168.1.241:3000/cliente/update",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -21,7 +37,7 @@ class ClienteService {
 
     async listarClientes() {
         return axios({
-            url: "http://192.168.1.248:3000/cliente/listar" + Globais.user,
+            url: "http://192.168.1.241:3000/cliente/listar" + Globais.user,
             method: "GET",
             timeout: 5000,
             header: {
@@ -36,8 +52,23 @@ class ClienteService {
 
     async listarId(data) {
         return axios({
-            url: "http://192.168.1.248:3000/cliente/" + data,
+            url: "http://192.168.1.241:3000/cliente/" + data,
             method: "GET",
+            timeout: 5000,
+            header: {
+                Accept: 'application/json'
+            }
+        }).then((response) => {
+            return Promise.resolve(response)
+        }).catch((error) => {
+            return Promise.reject(error)
+        })
+    }
+
+    async deletarId(data) {
+        return axios({
+            url: "http://192.168.1.241:3000/cliente/delete/" + data,
+            method: "DELETE",
             timeout: 5000,
             header: {
                 Accept: 'application/json'

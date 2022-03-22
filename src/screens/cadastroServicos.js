@@ -11,7 +11,7 @@ import servicosService from "../service/servicosService";
 import styles from "../style";
 
 
-export default function CadastroServiços({navigation, route}) {
+export default function CadastroServiços({ navigation, route }) {
 
     const [nome, setNome] = useState("");
     const [errorNome, setErrorNome] = useState("");
@@ -75,7 +75,7 @@ export default function CadastroServiços({navigation, route}) {
                         <Input
                             inputContainerStyle={{ backgroundColor: '#fff', padding: 2, borderRadius: 7 }}
                             placeholder="Nome do serviço"
-                            leftIcon={{ type: 'font-awesome', name: 'user' }}
+                            leftIcon={{ type: 'font-awesome', name: 'wrench' }}
                             autoCapitalize='words'
                             onChangeText={value => {
                                 setNome(value)

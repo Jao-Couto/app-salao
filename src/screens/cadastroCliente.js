@@ -1,6 +1,6 @@
 
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView } from 'react-native';
 import { Alert, View } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
@@ -12,7 +12,7 @@ import styles from '../style';
 import Globais from '../globais'
 
 
-export default function CadastroCliente({navigation, route}) {
+export default function CadastroCliente({ navigation, route }) {
 
     const [nome, setNome] = useState("");
     const [errorNome, setErrorNome] = useState("");
@@ -42,239 +42,274 @@ export default function CadastroCliente({navigation, route}) {
     let nascimentoField = null
     let celField = null
 
-    const validar = () =>{
+    const validar = () => {
         let error = true
-        if(nome == ""){
+        if (nome == "") {
             setErrorNome("Nome inválido")
             error = false
         }
-        if(!cpfField.isValid()){
-          setErrorCPF("CPF inválido")
-          error = false
+        if (!cpfField.isValid()) {
+            setErrorCPF("CPF inválido")
+            error = false
         }
-        if(rua == ""){
+        if (rua == "") {
             setErrorRua("Rua inválida")
             error = false
         }
-        if(bairro == ""){
+        if (bairro == "") {
             setErrorBairro("Bairro inválido")
             error = false
         }
-        if(num == ""){
+        if (num == "") {
             setErrorNum("Número inválido")
             error = false
         }
-        if(cidade == ""){
+        if (cidade == "") {
             setErrorCidade("Cidade inválida")
             error = false
         }
-        if(!nascimentoField.isValid()){
+        if (!nascimentoField.isValid()) {
             setErrorNascimento("Data inválida")
             error = false
         }
-        if(!celField.isValid()){
+        if (!celField.isValid()) {
             setErrorCel("Celular inválido")
             error = false
         }
         return error
-      }
+    }
 
-      const cadastrar = () => {
-        if(validar()){
-          let data ={
-              nome: nome,
-              cpf: CPF,
-              rua: rua,
-              bairro: bairro,
-              numero: num,
-              cidade: cidade,
-              celular: cel,
-              nascimento: nascimento,
-              usuario: Globais.user
-          }
-          clienteService.cadastrarCliente(data)
-          .then((response)=>{
-            Alert.alert("Sucesso!", "Cliente cadastrado com sucesso",[
-                {text: 'OK'}
-            ])
-            navigation.navigate("Clientes", {num: route.params.num+1})
-          })
-          .catch((error) => {
-              console.log(error)
-            console.log("Erro ao cadastrar")
-          })
+    const cadastrar = () => {
+        if (validar()) {
+            let data = {
+                nome: nome,
+                cpf: CPF,
+                rua: rua,
+                bairro: bairro,
+                numero: num,
+                cidade: cidade,
+                celular: cel,
+                nascimento: nascimento,
+                usuario: Globais.user
+            }
+
+            if (route.params.cliente) {
+                data.id = route.params.cliente.id
+                clienteService.atualizarCliente(data)
+                    .then((response) => {
+                        Alert.alert("Sucesso!", "Cliente atualizado com sucesso", [
+                            { text: 'OK' }
+                        ])
+                        navigation.navigate("Clientes", { num: route.params.num + 1 })
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        console.log("Erro ao atualizar cliente")
+                    })
+            }
+            else
+                clienteService.cadastrarCliente(data)
+                    .then((response) => {
+                        Alert.alert("Sucesso!", "Cliente cadastrado com sucesso", [
+                            { text: 'OK' }
+                        ])
+                        navigation.navigate("Clientes", { num: route.params.num + 1 })
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        console.log("Erro ao cadastrar")
+                    })
         }
-      }
-   
+    }
 
-    return(
+
+    useEffect(() => {
+        if (route.params.cliente) {
+            setNome(route.params.cliente.nome)
+            setCPF(route.params.cliente.cpf)
+            setRua(route.params.cliente.rua)
+            setBairro(route.params.cliente.bairro)
+            setNum(route.params.cliente.numero.toString())
+            setCidade(route.params.cliente.cidade)
+            setCel(route.params.cliente.celular)
+            setNascimento(route.params.cliente.nascimento)
+        }
+    }, [])
+
+
+    return (
         <KeyboardAvoidingView
-        behavior={Platform.OS=="ios" ? "padding" : "height"}
-        style={styles.safeArea}>
-        <LinearGradient
-        colors={['#b23dff', '#782bab', '#2e034a']}
-        style={styles.safeArea}>
-        <ScrollView>
-            <View style={styles.container}>
-                <Text h1 style={styles.loginTit}>Cadastro Cliente</Text>
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            style={styles.safeArea}>
+            <LinearGradient
+                colors={['#b23dff', '#782bab', '#2e034a']}
+                style={styles.safeArea}>
+                <ScrollView>
+                    <View style={styles.container}>
+                        <Text h1 style={styles.loginTit}>Cadastro Cliente</Text>
 
-                <Text h4 style={styles.label}>Nome:</Text>
-                <Input 
-                inputContainerStyle={{backgroundColor: '#fff', padding: 2, borderRadius: 7}}
-                placeholder="Nome Completo"
-                leftIcon={{ type: 'font-awesome', name: 'user' }}
-                onChangeText={value => {
-                setNome(value)
-                setErrorNome("")
-                }}
-                errorMessage={errorNome}
-                errorStyle={{fontSize: 16}}
-                />
+                        <Text h4 style={styles.label}>Nome:</Text>
+                        <Input
+                            inputContainerStyle={{ backgroundColor: '#fff', padding: 2, borderRadius: 7 }}
+                            placeholder="Nome Completo"
+                            leftIcon={{ type: 'font-awesome', name: 'user' }}
+                            value={nome}
+                            onChangeText={value => {
+                                setNome(value)
+                                setErrorNome("")
+                            }}
+                            errorMessage={errorNome}
+                            errorStyle={{ fontSize: 16 }}
+                        />
 
-                <Text h4 style={styles.label}>CPF:</Text>
-                <View style={styles.containerMask}>
-                <Icon type= 'font-awesome'
-                        name= 'id-card' 
-                        style={styles.icon}
-                        ></Icon>
-                <TextInputMask
-                    style={styles.inputMask}
-                    placeholder=" CPF"
-                    type={'cpf'}
-                    value={CPF}
-                    onChangeText={value => {
-                        setCPF(value)
-                        setErrorCPF("")
-                    }}
-                    keyboardType= 'number-pad'
-                    returnKeyType= 'done'
-                    ref={(ref) => cpfField = ref}
-                />
-                </View>
-                <Text style={styles.errorMsg}>{errorCPF}</Text>
+                        <Text h4 style={styles.label}>CPF:</Text>
+                        <View style={styles.containerMask}>
+                            <Icon type='font-awesome'
+                                name='id-card'
+                                style={styles.icon}
+                            ></Icon>
+                            <TextInputMask
+                                style={styles.inputMask}
+                                placeholder=" CPF"
+                                type={'cpf'}
+                                value={CPF}
+                                onChangeText={value => {
+                                    setCPF(value)
+                                    setErrorCPF("")
+                                }}
+                                keyboardType='number-pad'
+                                returnKeyType='done'
+                                ref={(ref) => cpfField = ref}
+                            />
+                        </View>
+                        <Text style={styles.errorMsg}>{errorCPF}</Text>
 
-                <Text h4 style={styles.label}>Rua:</Text>
-                <Input 
-                inputContainerStyle={{backgroundColor: '#fff', padding: 2, borderRadius: 7}}
-                placeholder="Informe a rua"
-                errorStyle={{fontSize: 16}}
-                leftIcon={{ type: 'font-awesome', name: 'road' }}
-                onChangeText={value => {
-                setRua(value)
-                setErrorRua("")
-                }}
-                errorMessage={errorRua}
-                />
+                        <Text h4 style={styles.label}>Rua:</Text>
+                        <Input
+                            inputContainerStyle={{ backgroundColor: '#fff', padding: 2, borderRadius: 7 }}
+                            placeholder="Informe a rua"
+                            errorStyle={{ fontSize: 16 }}
+                            leftIcon={{ type: 'font-awesome', name: 'road' }}
+                            value={rua}
+                            onChangeText={value => {
+                                setRua(value)
+                                setErrorRua("")
+                            }}
+                            errorMessage={errorRua}
+                        />
 
-                <Text h4 style={styles.label}>Bairro:</Text>
-                <Input
-                    inputContainerStyle={{backgroundColor: '#fff', padding: 2, borderRadius: 7}}
-                    placeholder="Informe o bairro"
-                    errorStyle={{fontSize: 16}}
-                    leftIcon={{ type: 'font-awesome', name: 'tree' }}
-                    onChangeText={value => {
-                    setBairro(value)
-                    setErrorBairro("")
-                    }}
-                    errorMessage={errorBairro}
-                />
+                        <Text h4 style={styles.label}>Bairro:</Text>
+                        <Input
+                            inputContainerStyle={{ backgroundColor: '#fff', padding: 2, borderRadius: 7 }}
+                            placeholder="Informe o bairro"
+                            errorStyle={{ fontSize: 16 }}
+                            leftIcon={{ type: 'font-awesome', name: 'tree' }}
+                            value={bairro}
+                            onChangeText={value => {
+                                setBairro(value)
+                                setErrorBairro("")
+                            }}
+                            errorMessage={errorBairro}
+                        />
 
-                <Text h4 style={styles.label}>Número:</Text>
-                <Input 
-                    inputContainerStyle={{backgroundColor: '#fff', padding: 2, borderRadius: 7}}
-                    placeholder="Informe o número"
-                    errorStyle={{fontSize: 16}}
-                    leftIcon={{ type: 'font-awesome', name: 'home' }}
-                    onChangeText={value => {
-                    setNum(value)
-                    setErrorNum("")
-                    }}
-                    errorMessage={errorNum}
-                    keyboardType= 'decimal-pad'
-                />
+                        <Text h4 style={styles.label}>Número:</Text>
+                        <Input
+                            inputContainerStyle={{ backgroundColor: '#fff', padding: 2, borderRadius: 7 }}
+                            placeholder="Informe o número"
+                            errorStyle={{ fontSize: 16 }}
+                            leftIcon={{ type: 'font-awesome', name: 'home' }}
+                            value={num}
+                            onChangeText={value => {
+                                setNum(value)
+                                setErrorNum("")
+                            }}
+                            errorMessage={errorNum}
+                            keyboardType='decimal-pad'
+                        />
 
-                <Text h4 style={styles.label}>Cidade:</Text>
-                <Input 
-                    inputContainerStyle={{backgroundColor: '#fff', padding: 2, borderRadius: 7}}
-                    placeholder="Informe a cidade"
-                    errorStyle={{fontSize: 16}}
-                    leftIcon={{ type: 'font-awesome', name: 'building' }}
-                    onChangeText={value => {
-                    setCidade(value)
-                    setErrorCidade("")
-                    }}
-                    errorMessage={errorCidade}
-                />
+                        <Text h4 style={styles.label}>Cidade:</Text>
+                        <Input
+                            inputContainerStyle={{ backgroundColor: '#fff', padding: 2, borderRadius: 7 }}
+                            placeholder="Informe a cidade"
+                            errorStyle={{ fontSize: 16 }}
+                            leftIcon={{ type: 'font-awesome', name: 'building' }}
+                            value={cidade}
+                            onChangeText={value => {
+                                setCidade(value)
+                                setErrorCidade("")
+                            }}
+                            errorMessage={errorCidade}
+                        />
 
-                <Text h4 style={styles.label}>Celular:</Text>
-                <View style={styles.containerMask}>
-                <Icon type= 'font-awesome'
-                        name= 'mobile' 
-                        style={styles.icon}
-                        ></Icon>
-                <TextInputMask
-                    style={styles.inputMask}
-                    placeholder=" Insira o celular"
-                    type={'cel-phone'}
-                    value={cel}
-                    onChangeText={value => {
-                        setCel(value)
-                        setErrorCel("")
-                    }}
-                    errorMessage={errorCel}
-                    keyboardType= 'number-pad'
-                    returnKeyType= 'done'
-                    ref={(ref) => celField = ref}
-                    />
-                </View>
-                <Text style={styles.errorMsg}>{errorCel}</Text>
+                        <Text h4 style={styles.label}>Celular:</Text>
+                        <View style={styles.containerMask}>
+                            <Icon type='font-awesome'
+                                name='mobile'
+                                style={styles.icon}
+                            ></Icon>
+                            <TextInputMask
+                                style={styles.inputMask}
+                                placeholder=" Insira o celular"
+                                type={'cel-phone'}
+                                value={cel}
+                                onChangeText={value => {
+                                    setCel(value)
+                                    setErrorCel("")
+                                }}
+                                errorMessage={errorCel}
+                                keyboardType='number-pad'
+                                returnKeyType='done'
+                                ref={(ref) => celField = ref}
+                            />
+                        </View>
+                        <Text style={styles.errorMsg}>{errorCel}</Text>
 
-                <Text h4 style={styles.label}>Data de nascimento:</Text>
-                <View style={styles.containerMask}>
-                <Icon type= 'font-awesome'
-                        name= 'birthday-cake' 
-                        style={styles.icon}
-                        ></Icon>
-                <TextInputMask
-                    options={{
-                        mask: '99/99/9999',
-                        validator: function(val, settings){
-                            let datas = val.split("/")
-                            if(datas[0] < 31 && datas[1] < 13 && datas[3] != "0000")
-                                return true
-                            else return false
-                        }
-                    }}
-                    style={styles.inputMask}
-                    placeholder=" Insira a data de nascimento"
-                    type={'custom'}
-                    value={nascimento}
-                    onChangeText={value => {
-                        setNascimento(value)
-                        setErrorNascimento("")
-                    }}
-                    keyboardType= 'number-pad'
-                    returnKeyType= 'done'
-                    ref={(ref) => nascimentoField = ref}
-                    />
-                </View>
-                <Text style={styles.errorMsg}>{errorNascimento}</Text>
+                        <Text h4 style={styles.label}>Data de nascimento:</Text>
+                        <View style={styles.containerMask}>
+                            <Icon type='font-awesome'
+                                name='birthday-cake'
+                                style={styles.icon}
+                            ></Icon>
+                            <TextInputMask
+                                options={{
+                                    mask: '99/99/9999',
+                                    validator: function (val, settings) {
+                                        let datas = val.split("/")
+                                        if (datas[0] < 31 && datas[1] < 13 && datas[3] != "0000")
+                                            return true
+                                        else return false
+                                    }
+                                }}
+                                style={styles.inputMask}
+                                placeholder=" Insira a data de nascimento"
+                                type={'custom'}
+                                value={nascimento}
+                                onChangeText={value => {
+                                    setNascimento(value)
+                                    setErrorNascimento("")
+                                }}
+                                keyboardType='number-pad'
+                                returnKeyType='done'
+                                ref={(ref) => nascimentoField = ref}
+                            />
+                        </View>
+                        <Text style={styles.errorMsg}>{errorNascimento}</Text>
 
-                <Button
-                    buttonStyle={{marginBottom: 50}}
-                    icon={
-                    <Icon
-                        name="user-plus"
-                          size={15}
-                        color="white"
-                    />
-                     }
-                    title=" Cadastrar"
-                    onPress={() => cadastrar()}
-                />
-            </View>
-        </ScrollView>
-        </LinearGradient>
+                        <Button
+                            buttonStyle={{ marginBottom: 50 }}
+                            icon={
+                                <Icon
+                                    name="user-plus"
+                                    size={15}
+                                    color="white"
+                                />
+                            }
+                            title=" Salvar"
+                            onPress={() => cadastrar()}
+                        />
+                    </View>
+                </ScrollView>
+            </LinearGradient>
         </KeyboardAvoidingView>
     );
 }
