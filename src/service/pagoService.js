@@ -5,7 +5,7 @@ class PagoService {
 
     async cadastrar(data) {
         return axios({
-            url: "http://192.168.1.241:3000/pagos/cadastrar",
+            url: Globais.url + "/pagos/cadastrar",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -21,7 +21,7 @@ class PagoService {
 
     async listar() {
         return axios({
-            url: "http://192.168.1.241:3000/pagos/listar" + Globais.user,
+            url: Globais.url + "/pagos/listar" + Globais.user,
             method: "GET",
             timeout: 5000,
             header: {
@@ -36,7 +36,7 @@ class PagoService {
 
     async listarData(data) {
         return axios({
-            url: "http://192.168.1.241:3000/pagos/data/" + data,
+            url: Globais.url + "/pagos/data/" + data,
             method: "GET",
             timeout: 5000,
             header: {
@@ -51,7 +51,7 @@ class PagoService {
 
     async listarId(data) {
         return axios({
-            url: "http://192.168.1.241:3000/pagos/id/" + data,
+            url: Globais.url + "/pagos/id/" + data,
             method: "GET",
             timeout: 5000,
             header: {

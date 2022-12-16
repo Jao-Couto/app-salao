@@ -4,7 +4,7 @@ class UsuarioService {
 
     async cadastrarUsuario(data) {
         return axios({
-            url: "http://192.168.1.241:3000/usuario/cadastrar",
+            url: Globais.url + "/usuario/cadastrar",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -20,7 +20,7 @@ class UsuarioService {
 
     async loginUsuario(data) {
         return axios({
-            url: "http://192.168.1.241:3000/usuario/login",
+            url: Globais.url + "/usuario/login",
             method: "POST",
             timeout: 10000,
             data: data,
@@ -36,7 +36,7 @@ class UsuarioService {
 
     async listarUsuario() {
         return axios({
-            url: "http://192.168.1.241:3000/usuario/listar",
+            url: Globais.url + "/usuario/listar",
             method: "GET",
             timeout: 5000,
             header: {

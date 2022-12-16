@@ -5,7 +5,7 @@ class AtendimentoService {
 
     async marcarHora(data) {
         return axios({
-            url: "http://192.168.1.241:3000/atendimentos/cadastrar",
+            url: Globais.url + "/atendimentos/cadastrar",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -21,7 +21,7 @@ class AtendimentoService {
 
     async listarAtendimentos() {
         return axios({
-            url: "http://192.168.1.241:3000/atendimentos/listar" + Globais.user,
+            url: Globais.url + "/atendimentos/listar" + Globais.user,
             method: "GET",
             timeout: 5000,
             header: {
@@ -36,7 +36,7 @@ class AtendimentoService {
 
     async listarData(data) {
         return axios({
-            url: "http://192.168.1.241:3000/atendimentos/data" + Globais.user + "/" + data,
+            url: Globais.url + "/atendimentos/data" + Globais.user + "/" + data,
             method: "GET",
             timeout: 5000,
             header: {
@@ -51,7 +51,7 @@ class AtendimentoService {
 
     async listarHora(data) {
         return axios({
-            url: "http://192.168.1.241:3000/atendimentos/hora" + Globais.user + "/" + data,
+            url: Globais.url + "/atendimentos/hora" + Globais.user + "/" + data,
             method: "GET",
             timeout: 5000,
             header: {
@@ -66,7 +66,7 @@ class AtendimentoService {
 
     async listarId(data) {
         return axios({
-            url: "http://192.168.1.241:3000/atendimentos/id/" + data,
+            url: Globais.url + "/atendimentos/id/" + data,
             method: "GET",
             timeout: 5000,
             header: {
@@ -81,7 +81,7 @@ class AtendimentoService {
 
     async deletarId(data) {
         return axios({
-            url: "http://192.168.1.241:3000/atendimentos/delete/" + data,
+            url: Globais.url + "/atendimentos/delete/" + data,
             method: "DELETE",
             timeout: 5000,
             header: {

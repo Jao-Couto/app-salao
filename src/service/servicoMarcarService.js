@@ -5,7 +5,7 @@ class ServicoMarcar {
 
     async marcarServico(data) {
         return axios({
-            url: "http://192.168.1.241:3000/servicosMarcados/cadastrar",
+            url: Globais.url + "/servicosMarcados/cadastrar",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -21,7 +21,7 @@ class ServicoMarcar {
 
     async listarId(data) {
         return axios({
-            url: "http://192.168.1.241:3000/servicosMarcados/listar/" + data,
+            url: Globais.url + "/servicosMarcados/listar/" + data,
             method: "GET",
             timeout: 5000,
             header: {
@@ -36,7 +36,7 @@ class ServicoMarcar {
 
     async deletarId(data) {
         return axios({
-            url: "http://192.168.1.241:3000/servicosMarcados/delete/" + data,
+            url: Globais.url + "/servicosMarcados/delete/" + data,
             method: "DELETE",
             timeout: 5000,
             header: {
